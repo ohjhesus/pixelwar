@@ -28,7 +28,7 @@ public class Options : MonoBehaviour {
 		originalResolution = Screen.currentResolution.width.ToString () + "." + Screen.currentResolution.height.ToString ();
 		tempResolution = PlayerPrefs.GetString ("resolution", originalResolution).Split("."[0]);
 		resolution = new Vector2 (int.Parse(tempResolution [0]), int.Parse(tempResolution [1]));
-//		Debug.Log (resolution);
+		Debug.Log ("Resoltion: " + resolution);
 
 		if (PlayerPrefs.HasKey ("fullscreen") && PlayerPrefs.GetInt ("fullscreen") == 0) {
 			isFullscreen = false;
