@@ -9,8 +9,7 @@ public class Options : MonoBehaviour {
 	public bool isFullscreen;
 	private string[] tempResolution;
 	private string originalResolution;
-
-	// Use this for initialization
+	
 	void Start () {
 		sfxVolume = PlayerPrefs.GetFloat ("sfxVolume", 0.5f);
 		musicVolume = PlayerPrefs.GetFloat ("musicVolume", 0.5f);
@@ -18,8 +17,7 @@ public class Options : MonoBehaviour {
 
 		UpdateSettings ();
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 	
 	}
