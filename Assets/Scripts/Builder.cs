@@ -5,10 +5,13 @@ using System.Collections;
 public class Builder : MonoBehaviour {
 
 	public GameObject builderPanel;
+	public GameObject builderPanelBackground;
 	private GameObject localPlayer;
 
 	public Material unlit;
 	public PixelsRemaining pr;
+
+	public float tileScaleAmount = 1.5f;
 
     private Material attachmentMat;
 
@@ -17,12 +20,14 @@ public class Builder : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		builderPanel.SetActive (false);
+		builderPanelBackground.SetActive(false);
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if (builderPanel.activeInHierarchy) {
 			builderPanel.transform.parent.position = Camera.main.transform.position;
+			builderPanelBackground.transform.parent.position = Camera.main.transform.position;
 		}
 
 
@@ -40,7 +45,8 @@ public class Builder : MonoBehaviour {
 
 	void OpenBuilder () {
         builderPanel.SetActive(true);
-        bloomWasOn = Camera.main.GetComponent<BloomOptimized>().enabled;
+		builderPanelBackground.SetActive(true);
+		bloomWasOn = Camera.main.GetComponent<BloomOptimized>().enabled;
 		Camera.main.GetComponent<BloomOptimized>().enabled = false;
         //localPlayer = GameObject.Find("player1");
 		pr.pixelsRemaining = localPlayer.GetComponent<Player> ().pixels;
@@ -68,6 +74,7 @@ public class Builder : MonoBehaviour {
     {
 		Camera.main.GetComponent<BloomOptimized>().enabled = bloomWasOn;
         builderPanel.SetActive(false);
+		builderPanelBackground.SetActive(false);
 	}
 
 	public void BuildPlayer () {

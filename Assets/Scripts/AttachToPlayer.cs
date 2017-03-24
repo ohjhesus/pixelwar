@@ -8,7 +8,7 @@ public class AttachToPlayer : MonoBehaviour {
 	public Vector3 localPos;
 	public Object original;
 	public bool sameColorAsShip;
-	public int sortingOrderDifference = 1;
+	public int sortingOrder = 1;
 
 	// Use this for initialization
 	void Start () {

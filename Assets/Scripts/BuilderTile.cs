@@ -9,13 +9,12 @@ public class BuilderTile : MonoBehaviour {
 	private bool snappedToAnchor;
 	private bool canGetClosestAnchor;
 	private GameObject closestAnchor;
-	private Vector3 closestAnchorLocalPos;
 	private List<GameObject> anchors;
 	private Vector3 startPos;
 	private Vector2 oldMousePos;
 	private Vector2 worldMousePos;
 
-	public float scaleAmount;
+	private float scaleAmount;
 
 	public Object attachment;
 	private GameObject attachmentAsGO;
@@ -29,6 +28,7 @@ public class BuilderTile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		builder = GameObject.Find("GameControllers").GetComponent<Builder>();
+		scaleAmount = builder.tileScaleAmount;
 		anchors = new List<GameObject> ();
 		oldMousePos = Input.mousePosition;
 		UpdateAnchors ();
@@ -55,24 +55,18 @@ public class BuilderTile : MonoBehaviour {
 		Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		foreach (GameObject go in anchors) {
 			float diff = Vector2.Distance (go.transform.position, position);
-			Debug.Log (go.name + diff);
+			//Debug.Log (go.name + diff);
 			if (diff < distance) {
 				closest = go;
 				distance = diff;
 			}
 		}
 
-		closestAnchorLocalPos = new Vector3(Screen.width / 2, (
-				Screen.height + builder.builderPanel.transform.FindChild("BuildArea").GetComponent<RectTransform>().rect.yMin) / 2
-			) + closest.GetComponent<RectTransform>().localPosition;
 		return closest;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		// Debug.Log (closestAnchorLocalPos);
-		// Debug.Log (Input.mousePosition);
-
 		worldMousePos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		if (!Input.mousePosition.Equals (oldMousePos)) {
 			oldMousePos = Input.mousePosition;
@@ -80,10 +74,10 @@ public class BuilderTile : MonoBehaviour {
 				closestAnchor = GetClosestAnchor ();
 		}
 			
-		Debug.Log (Vector2.Distance (closestAnchorLocalPos, Input.mousePosition));
-		if (Vector2.Distance (closestAnchorLocalPos, Input.mousePosition) < 50 && isBeingDragged) {
+		//Debug.Log (Vector2.Distance (closestAnchor.transform.position, worldMousePos));
+		if (Vector2.Distance (closestAnchor.transform.position, worldMousePos) < 0.8 && isBeingDragged) {
 			snappedToAnchor = true;
-			GetComponent<RectTransform> ().position = closestAnchor.GetComponent<RectTransform> ().position;//new Vector3 (closestAnchor.GetComponent<RectTransform>().position.x, -closestAnchorLocalPos.y, 0);// + new Vector3 (GetComponent<RectTransform> ().pivot.x, GetComponent<RectTransform>().pivot.y, 0);
+			GetComponent<RectTransform> ().position = closestAnchor.GetComponent<RectTransform> ().position;
 		} else {
 			snappedToAnchor = false;
 		}
@@ -123,7 +117,7 @@ public class BuilderTile : MonoBehaviour {
 						part.tag = "Attachment";
 						part.name = attachment.name;
 						part.GetComponent<SpriteRenderer> ().sortingLayerName = "UI";
-						part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrderDifference;
+						part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder;
 						part.transform.localScale = new Vector3 (oldLocalScale.x * 150f, oldLocalScale.y * 150f, 1);
 						part.GetComponent<SpriteRenderer> ().material = attachmentMat;
 						if (part.GetComponent<FollowMouse> ()) {

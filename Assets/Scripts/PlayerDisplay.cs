@@ -13,7 +13,7 @@ public class PlayerDisplay : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		playerModel = (GameObject)Instantiate (modelPrefab, new Vector3 (0, 0, -0.1f), transform.rotation);
+		playerModel = (GameObject)Instantiate (modelPrefab, new Vector3 (0, 0, 1f), transform.rotation);
 		playerModel.transform.SetParent (transform);
 		playerModel.name = "PlayerModel";
 		playerModel.transform.localScale = Vector3.one;

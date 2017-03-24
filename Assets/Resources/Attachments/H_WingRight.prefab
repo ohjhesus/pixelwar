@@ -29,7 +29,7 @@ GameObject:
   - component: {fileID: 11409946}
   - component: {fileID: 222713352279081132}
   - component: {fileID: 114429835736118590}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Anchor
   m_TagString: Anchor
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 11432172}
   - component: {fileID: 222039072235701296}
   - component: {fileID: 114108590738661318}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Anchor
   m_TagString: Anchor
   m_Icon: {fileID: 0}
@@ -129,6 +129,7 @@ MonoBehaviour:
   localPos: {x: 0, y: 0, z: 0}
   original: {fileID: 0}
   sameColorAsShip: 1
+  sortingOrder: 1
 --- !u!212 &21200058
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -159,7 +160,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -43715495
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 66cd013fd201a4935825651595a51747, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
