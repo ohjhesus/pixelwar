@@ -52,14 +52,13 @@ public class BuilderTile : MonoBehaviour {
 
 		GameObject closest = null;
 		float distance = Mathf.Infinity;
-		Vector2 position = Input.mousePosition;
+		Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		foreach (GameObject go in anchors) {
-			Vector2 diff = Vector2.Distance (go.transform.position - new Vector3(position.x, position.y, 0));
-			Debug.Log (go.name + diff.sqrMagnitude);
-			float curDistance = diff.sqrMagnitude;
-			if (curDistance < distance) {
+			float diff = Vector2.Distance (go.transform.position, position);
+			Debug.Log (go.name + diff);
+			if (diff < distance) {
 				closest = go;
-				distance = curDistance;
+				distance = diff;
 			}
 		}
 
