@@ -39,7 +39,7 @@ namespace UnityStandardAssets.ImageEffects
         private Material fastBloomMaterial = null;
 
 
-        public override bool CheckResources ()
+		public override bool CheckResources ()
 		{
             CheckSupport (false);
 

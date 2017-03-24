@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ThrustFlicker : MonoBehaviour {
@@ -9,6 +9,11 @@ public class ThrustFlicker : MonoBehaviour {
 	public float maxGreen;
 	public float maxGreenChange;
 	private bool canFlicker;
+	private Light thrusterLight;
+
+	void Start () {
+		thrusterLight = GetComponent<Light>();
+	}
 	
 	void OnEnable () {
 		canFlicker = true;
@@ -17,15 +22,13 @@ public class ThrustFlicker : MonoBehaviour {
 	void Update () {
 		if (canFlicker) {
 			canFlicker = false;
-			StartCoroutine(Flicker ());
+			thrusterLight.intensity = Random.Range(minIntensity, maxIntensity);
+			thrusterLight.color = new Color(thrusterLight.color.r, Mathf.Clamp(thrusterLight.color.g + Random.Range(-maxGreenChange, maxGreenChange), minGreen, maxGreen), thrusterLight.color.b);
+			StartCoroutine(Cooldown ());
 		}
 	}
 	
-	IEnumerator Flicker () {
-		GetComponent<Light> ().intensity = Random.Range (minIntensity, maxIntensity);
-		GetComponent<Light> ().color = new Color (GetComponent<Light> ().color.r, Mathf.Clamp (GetComponent<Light> ().color.g + Random.Range (-maxGreenChange, maxGreenChange), minGreen, maxGreen), GetComponent<Light> ().color.b);
-
-		
+	IEnumerator Cooldown () {
 		yield return new WaitForSeconds (0.1f);
 		canFlicker = true;
 	}

@@ -1,13 +1,14 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
+using UnityEngine;
 using System.Collections;
 
-public class Projectile : NetworkBehaviour {
+public class Projectile : MonoBehaviour {
 
-	[HideInInspector] [SyncVar] public float speed;
-	[HideInInspector] [SyncVar] public float travelDistance;
-	[HideInInspector] [SyncVar] public float knockback;
-	[HideInInspector] [SyncVar] public int damage;
+	[HideInInspector] public float speed;
+	[HideInInspector] public float torque;
+	[HideInInspector] public float travelDistance;
+	[HideInInspector] public float knockback;
+	[HideInInspector] public int damage;
+	public GameObject[] otherProjectiles;
 	
 	private Vector3 startPos;
 	
@@ -16,20 +17,17 @@ public class Projectile : NetworkBehaviour {
 	void Start () {
 		rib = GetComponent<Rigidbody2D> ();
 		rib.velocity = transform.TransformDirection(new Vector3(0, speed, 0));
+		rib.AddTorque(torque);
 		startPos = transform.position;
 	}
 
 	void Update () {
-		if (!isServer)
-			return;
-
 		if (Vector3.Distance (startPos, transform.position) > travelDistance) {
-			RpcExplode ();
+			Explode ();
 		}
 	}
 
-	[ClientRpc]
-	public void RpcExplode () {
+	public void Explode () {
 		transform.FindChild("Explosion").GetComponent<ProjectileExplosion> ().enabled = true;
 		transform.FindChild("Explosion").parent = null;
 		

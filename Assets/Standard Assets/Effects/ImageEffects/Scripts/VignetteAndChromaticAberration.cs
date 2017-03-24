@@ -33,7 +33,7 @@ namespace UnityStandardAssets.ImageEffects
         private Material m_ChromAberrationMaterial;
 
 
-        public override bool CheckResources ()
+		public override bool CheckResources ()
         {
             CheckSupport (false);
 
@@ -109,6 +109,6 @@ namespace UnityStandardAssets.ImageEffects
 
             RenderTexture.ReleaseTemporary (color);
             RenderTexture.ReleaseTemporary (color2A);
-        }
-    }
+		}
+	}
 }

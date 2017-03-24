@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityStandardAssets.ImageEffects;
-using UnityEngine.Networking;
 using System.Collections;
 
-public class Shoot : NetworkBehaviour {
+public class Shoot : MonoBehaviour {
 	
 	public float cooldown;
 	public GameObject projectile;
-	public float projectileSpeed;
+	public float projectileSpeedMultiplier;
+	private float totalPlayerSpeed;
+	public float projectileTorque;
 	public float projectileKnockback;
 	public int projectileDamage;
 	public float projectileTravelDistance;
@@ -15,24 +16,33 @@ public class Shoot : NetworkBehaviour {
 	public float aberration;
 	public float lerpTime;
 
-	[HideInInspector]
-	public AudioSource sfx;
-	
+	public bool canShoot;
 
 	void Start () {
-		sfx = GetComponent<AudioSource> ();
-		GetComponentInParent<FollowMouse> ().cannons.Add (gameObject);
+		projectileDamage = -projectileDamage;
+		canShoot = false;
+		StartCoroutine (Cooldown ());
 	}
-	
+
+	public void RemoveFromLists () {
+		GetComponent<AttachToPlayer> ().target.GetComponent<Player> ().shootScripts.Remove (this);
+	}
+
 	void Update () {
 
 	}
 
+	public IEnumerator Cooldown () {
+		yield return new WaitForSeconds (cooldown);
+		canShoot = true;
+	}
+
 	public IEnumerator FadeAberration () {
 		Camera.main.GetComponent<VignetteAndChromaticAberration> ().chromaticAberration = aberration;
-		float currentLerpTime = Time.time;
-		while (currentLerpTime > Time.time - cooldown) {
-			Camera.main.GetComponent<VignetteAndChromaticAberration> ().chromaticAberration = Mathf.Lerp (Camera.main.GetComponent<VignetteAndChromaticAberration> ().chromaticAberration, 0f, (Time.time - currentLerpTime) / cooldown);
+		float currentLerpTime = 0;
+		while (currentLerpTime <= lerpTime) {
+			currentLerpTime += Time.deltaTime;
+			Camera.main.GetComponent<VignetteAndChromaticAberration> ().chromaticAberration = Mathf.Lerp (Camera.main.GetComponent<VignetteAndChromaticAberration> ().chromaticAberration, 0f, currentLerpTime / lerpTime);
 			yield return new WaitForSeconds (0);
 		}
 	}

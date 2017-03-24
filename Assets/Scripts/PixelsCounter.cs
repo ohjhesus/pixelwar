@@ -1,30 +1,24 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Collections;
 
 public class PixelsCounter : MonoBehaviour {
 
-	private Player localPlayer;
-	
+	private GameObject player;
+
 	void Start () {
-
-	}
-
-	void UpdatePlayer () {
-		foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
-			if (go.GetComponent<NetworkIdentity> ().isLocalPlayer) {
-				localPlayer = go.GetComponent <Player> ();
-			}
-		}
+		player = GameObject.Find("player1");
 	}
 
 	void Update () {
-		UpdatePlayer ();
-		if (localPlayer != null) {
-			GetComponent<Text> ().text = localPlayer.pixels + " PIXELS";
-		} else {
-			GetComponent<Text> ().text = "";
+		if (player != null) {
+			GetComponent<Text> ().text = player.GetComponent<Player> ().pixels + " PIXELS";
+            GetComponentInParent<Image>().enabled = true;
+        } else {
+			player = GameObject.Find("player1");
+			GetComponent<Text>().text = "";
+			GetComponentInParent<Image>().enabled = false;
 		}
 	}
 }

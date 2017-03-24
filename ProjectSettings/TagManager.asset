@@ -8,6 +8,16 @@ TagManager:
   - TurnUpgrade
   - Projectile
   - SFX
+  - SpaceObject
+  - Arena Edge
+  - Anchor
+  - Attachment
+  - PreviousAttachment
+  - Cannon
+  - Shield
+  - Hull
+  - Mine
+  - Special
   layers:
   - Default
   - TransparentFX
@@ -19,8 +29,8 @@ TagManager:
   - 
   - Background
   - Mate
-  - 
-  - 
+  - Pixels
+  - Player
   - 
   - 
   - 
@@ -42,9 +52,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Player
+    uniqueID: 4251251801
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
-    uniqueID: 4251251801
+  - name: UI
+    uniqueID: 3850334337
     locked: 0
