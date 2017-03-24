@@ -5,7 +5,7 @@ using System.Collections;
 public class PlayerDisplay : MonoBehaviour {
 
 	public Object modelPrefab;
-	private GameObject playerModel;
+	[HideInInspector] public GameObject playerModel;
 
 	// Use this for initialization
 	void Start () {
