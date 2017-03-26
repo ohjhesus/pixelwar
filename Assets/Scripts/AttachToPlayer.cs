@@ -16,12 +16,4 @@ public class AttachToPlayer : MonoBehaviour {
 			target.GetComponent<Player> ().attachments.Add (gameObject);
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (target == null)
-			return;
-
-		transform.localPosition = localPos;
-	}
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.ImageEffects;
 using System.Collections;
 
@@ -12,6 +13,7 @@ public class Builder : MonoBehaviour {
 	public PixelsRemaining pr;
 
 	public float tileScaleAmount = 1.5f;
+	public float snapDistance = 0.5f;
 
     private Material attachmentMat;
 
@@ -61,11 +63,21 @@ public class Builder : MonoBehaviour {
 			part.transform.localPosition = go.GetComponent<AttachToPlayer> ().localPos;
 			part.tag = "PreviousAttachment";
 			part.name = attachment.name;
-			part.GetComponent<SpriteRenderer> ().sortingOrder += 100;
 			part.transform.localScale = new Vector3 (oldLocalScale.x * 150, oldLocalScale.y * 150, 1);
-			part.GetComponent<SpriteRenderer> ().material = unlit;
 			if (part.GetComponent<FollowMouse> ()) {
 				part.GetComponent<FollowMouse> ().enabled = false;
+			}
+				
+			part.GetComponent<SpriteRenderer> ().sortingLayerName = "UI";
+			part.layer = 5;
+			part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder;
+			part.transform.localScale = new Vector3 (oldLocalScale.x * 150f, oldLocalScale.y * 150f, 1);
+			part.GetComponent<SpriteRenderer> ().material = unlit;
+
+			foreach (GameObject anchor in GameObject.FindGameObjectsWithTag ("Anchor")) {
+				if (new Vector2 (transform.position.x, transform.position.y) == new Vector2 (anchor.transform.position.x, anchor.transform.position.y)) {
+					anchor.GetComponent<Image> ().enabled = false;
+				}
 			}
 		}
 	}

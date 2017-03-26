@@ -83,7 +83,7 @@ public class BuilderTile : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButtonDown (0)) {
-			if (Vector2.Distance (worldMousePos, transform.position) < 1) {
+			if (Vector2.Distance (worldMousePos, transform.position) < builder.snapDistance) {
 				isBeingDragged = true;
 			}
 		}

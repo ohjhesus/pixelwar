@@ -131,6 +131,7 @@ public class Player : MonoBehaviour {
 //		attachment.transform.parent = transform;
 //		attachment.transform.lossyScale = oldScale;
 		attachment.GetComponent<AttachToPlayer> ().localPos = new Vector3 (posX, posY, 0);
+		attachment.transform.localPosition = attachment.GetComponent<AttachToPlayer> ().localPos;
 		attachment.GetComponent<AttachToPlayer> ().target = transform;
 		attachment.GetComponent<AttachToPlayer> ().original = Resources.Load ("Attachments/" + attachment.name.Replace ("(Clone)", "").Trim ());
 		attachment.transform.SetParent(transform);
