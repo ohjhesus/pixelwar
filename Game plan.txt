@@ -1,4 +1,0 @@
-Multiplayer fighter - LAN and online
-Mouse shooter
-Pixels - health and currency
-Customisable ships - add weapons, upgrades
