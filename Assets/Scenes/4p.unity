@@ -2879,6 +2879,7 @@ MonoBehaviour:
   unlit: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   pr: {fileID: 142330108}
   tileScaleAmount: 3
+  snapDistance: 0.5
 --- !u!1 &269243064
 GameObject:
   m_ObjectHideFlags: 0

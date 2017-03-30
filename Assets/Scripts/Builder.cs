@@ -60,7 +60,7 @@ public class Builder : MonoBehaviour {
 			GameObject part = (GameObject)Instantiate (attachment, transform.position, transform.rotation);
 			Vector3 oldLocalScale = part.transform.localScale;
 			part.transform.parent = GameObject.Find ("PlayerModel").transform;
-			part.transform.localPosition = go.GetComponent<AttachToPlayer> ().localPos;
+			part.transform.localPosition = go.GetComponent<AttachToPlayer> ().localPos * 150;
 			part.tag = "PreviousAttachment";
 			part.name = attachment.name;
 			part.transform.localScale = new Vector3 (oldLocalScale.x * 150, oldLocalScale.y * 150, 1);
@@ -104,7 +104,7 @@ public class Builder : MonoBehaviour {
 		Transform playermodel = GameObject.Find ("PlayerModel").transform;
 		foreach (Transform bAttachment in playermodel) {
 			if (bAttachment.tag == "Attachment") {
-				localPlayer.GetComponent<Player> ().SpawnAttachment (bAttachment.name, bAttachment.localPosition.x / 895, bAttachment.localPosition.y / 895);
+				localPlayer.GetComponent<Player> ().SpawnAttachment (bAttachment.name, bAttachment.localPosition.x / 150, bAttachment.localPosition.y / 150); //895
 			}
 		}
 
