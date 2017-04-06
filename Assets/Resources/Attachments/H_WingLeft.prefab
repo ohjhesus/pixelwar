@@ -29,7 +29,7 @@ GameObject:
   - component: {fileID: 11417714}
   - component: {fileID: 222547940208287346}
   - component: {fileID: 114161118271557000}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: Anchor
   m_TagString: Anchor
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 11461180}
   - component: {fileID: 222369131671149552}
   - component: {fileID: 114809396636205450}
-  m_Layer: 12
+  m_Layer: 5
   m_Name: Anchor
   m_TagString: Anchor
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ Transform:
   m_GameObject: {fileID: 122614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -273.1794, y: -235.52992, z: 0}
-  m_LocalScale: {x: 11, y: 11, z: 1}
+  m_LocalScale: {x: 5.5, y: 5.5, z: 1}
   m_Children:
   - {fileID: 224731396412566726}
   - {fileID: 224464030611065932}

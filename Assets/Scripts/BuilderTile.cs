@@ -113,12 +113,12 @@ public class BuilderTile : MonoBehaviour {
 						GameObject part = (GameObject)Instantiate (attachment, transform.position, transform.rotation);
 						Vector3 oldLocalScale = part.transform.localScale;
 						part.transform.parent = GameObject.Find ("PlayerModel").transform;
-						part.transform.localPosition = closestAnchor.transform.localPosition;
+						part.transform.position = closestAnchor.transform.position;
 						part.tag = "Attachment";
 						part.name = attachment.name;
 						part.GetComponent<SpriteRenderer> ().sortingLayerName = "UI";
 						part.layer = 5;
-						part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder;
+						part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder - 100;
 						part.transform.localScale = new Vector3 (oldLocalScale.x * 150f, oldLocalScale.y * 150f, 1);
 						part.GetComponent<SpriteRenderer> ().material = attachmentMat;
 						if (part.GetComponent<FollowMouse> ()) {
