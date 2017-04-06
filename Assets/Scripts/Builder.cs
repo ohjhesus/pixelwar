@@ -104,7 +104,7 @@ public class Builder : MonoBehaviour {
 		Transform playermodel = GameObject.Find ("PlayerModel").transform;
 		foreach (Transform bAttachment in playermodel) {
 			if (bAttachment.tag == "Attachment") {
-				localPlayer.GetComponent<Player> ().SpawnAttachment (bAttachment.name, bAttachment.localPosition.x / 150, bAttachment.localPosition.y / 150); //895
+				localPlayer.GetComponent<Player> ().SpawnAttachment (bAttachment.name, bAttachment.localPosition.x / 895, bAttachment.localPosition.y / 895); //895
 			}
 		}
 

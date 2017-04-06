@@ -6058,6 +6058,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352b7e6530d7049c69f402f297f6e183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minCooldown: 5
+  maxCooldown: 15
 --- !u!1 &716382186
 GameObject:
   m_ObjectHideFlags: 0

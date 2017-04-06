@@ -5,6 +5,9 @@ public class SpaceObjectSpawner : MonoBehaviour {
 
 	private Object[] spaceObjects;
 
+	public float minCooldown;
+	public float maxCooldown;
+
 	private Vector3 spawnLocation;
 	private bool canSpawn = false;
 
@@ -57,7 +60,7 @@ public class SpaceObjectSpawner : MonoBehaviour {
 	}
 
 	IEnumerator Cooldown () {
-		yield return new WaitForSeconds (Random.Range (10, 20));
+		yield return new WaitForSeconds (Random.Range (minCooldown, maxCooldown));
 //		yield return new WaitForSeconds (1);
 		canSpawn = true;
 	}

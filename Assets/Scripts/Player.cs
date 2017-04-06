@@ -130,11 +130,11 @@ public class Player : MonoBehaviour {
 //		Vector3 oldScale = attachment.transform.localScale;
 //		attachment.transform.parent = transform;
 //		attachment.transform.lossyScale = oldScale;
+		attachment.transform.SetParent(transform);
 		attachment.GetComponent<AttachToPlayer> ().localPos = new Vector3 (posX, posY, 0);
 		attachment.transform.localPosition = attachment.GetComponent<AttachToPlayer> ().localPos;
 		attachment.GetComponent<AttachToPlayer> ().target = transform;
 		attachment.GetComponent<AttachToPlayer> ().original = Resources.Load ("Attachments/" + attachment.name.Replace ("(Clone)", "").Trim ());
-		attachment.transform.SetParent(transform);
 		attachment.tag = "Attachment";
 		string tempName = attachment.name.Replace ("(Clone)", "").Trim ();
 		if (attachment.GetComponent<AttachToPlayer> ().sameColorAsShip) {
