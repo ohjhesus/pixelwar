@@ -18,6 +18,7 @@ TagManager:
   - Hull
   - Mine
   - Special
+  - PlayerSpawn
   layers:
   - Default
   - TransparentFX

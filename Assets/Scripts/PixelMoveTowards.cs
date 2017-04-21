@@ -11,7 +11,7 @@ public class PixelMoveTowards : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		rotationAmount = Random.Range (-2f, 2f);
+		rotationAmount = Random.Range (-1f, 1f);
 		CheckDistance ();
 	}
 	
@@ -23,7 +23,7 @@ public class PixelMoveTowards : MonoBehaviour {
 			transform.position = Vector3.MoveTowards (new Vector3 (transform.position.x, transform.position.y, -1), new Vector3 (closestPlayer.transform.position.x, closestPlayer.transform.position.y, -1), (4 - moveDistance) / 100);
 		}
 
-		transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotationAmount - ((4 - moveDistance) * rotationAmount * 10));
+		transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotationAmount - ((4 - moveDistance) * rotationAmount * 2));
 
 		if (canCheckDistance) {
 			canCheckDistance = false;

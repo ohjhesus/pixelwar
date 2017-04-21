@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 6054818}
   - component: {fileID: 11432814}
   - component: {fileID: 11419618}
+  - component: {fileID: 114377574742250876}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -181,7 +182,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 113828}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0540009, y: 0.070990026, z: 0}
+  m_LocalPosition: {x: 449.5741, y: 332.5275, z: 0}
   m_LocalScale: {x: 7.5, y: 7.5, z: 1}
   m_Children:
   - {fileID: 464588}
@@ -880,3 +881,29 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 113828}
   m_IsPrefabParent: 1
+--- !u!114 &114377574742250876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 485970}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0

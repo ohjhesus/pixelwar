@@ -27,7 +27,7 @@ public class BuilderTile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		builder = GameObject.Find("GameControllers").GetComponent<Builder>();
+		builder = GameObject.Find("GameManager").GetComponent<Builder>();
 		scaleAmount = builder.tileScaleAmount;
 		anchors = new List<GameObject> ();
 		oldMousePos = Input.mousePosition;
