@@ -77,7 +77,7 @@ public class BuilderTile : MonoBehaviour {
 		//Debug.Log (Vector2.Distance (closestAnchor.transform.position, worldMousePos));
 		if (Vector2.Distance (closestAnchor.transform.position, worldMousePos) < 0.8 && isBeingDragged) {
 			snappedToAnchor = true;
-			GetComponent<RectTransform>().position = closestAnchor.GetComponent<RectTransform>().position;
+			transform.position = closestAnchor.transform.position;
 		} else {
 			snappedToAnchor = false;
 		}
@@ -118,14 +118,14 @@ public class BuilderTile : MonoBehaviour {
 						part.name = attachment.name;
 						part.GetComponent<SpriteRenderer> ().sortingLayerName = "UI";
 						part.layer = 5;
-						part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder - 100;
+						part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder;
 						part.transform.localScale = new Vector3 (oldLocalScale.x * 150f, oldLocalScale.y * 150f, 1);
 						part.GetComponent<SpriteRenderer> ().material = attachmentMat;
 						if (part.GetComponent<FollowMouse> ()) {
 							part.GetComponent<FollowMouse> ().enabled = false;
 						}
 
-						closestAnchor.GetComponent<Image> ().enabled = false;
+						closestAnchor.GetComponent<SpriteRenderer> ().enabled = false;
 
 						pr.pixelsRemaining -= part.GetComponent<AttachToPlayer> ().price;
 						pr.UpdateCounter ();

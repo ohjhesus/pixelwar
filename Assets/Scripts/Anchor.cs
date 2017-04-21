@@ -14,9 +14,9 @@ public class Anchor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (builderPanel.activeInHierarchy) {
-			GetComponent<Image> ().enabled = true;
+			GetComponent<SpriteRenderer> ().enabled = true;
 		} else {
-			GetComponent<Image> ().enabled = false;
+			GetComponent<SpriteRenderer> ().enabled = false;
 		}
 	}
 }

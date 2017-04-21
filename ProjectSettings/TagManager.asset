@@ -58,9 +58,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: UIBackground
+    uniqueID: 850185439
+    locked: 0
   - name: UI
     uniqueID: 3850334337
     locked: 0
-  - name: UIAbove
+  - name: PlayerModelBelow
+    uniqueID: 69513363
+    locked: 0
+  - name: PlayerModel
+    uniqueID: 2477721383
+    locked: 0
+  - name: PlayerModelAbove
     uniqueID: 3799100641
+    locked: 0
+  - name: Anchor
+    uniqueID: 204114837
     locked: 0

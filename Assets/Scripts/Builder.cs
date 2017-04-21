@@ -64,13 +64,20 @@ public class Builder : MonoBehaviour {
 			part.tag = "PreviousAttachment";
 			part.name = attachment.name;
 			part.transform.localScale = new Vector3 (oldLocalScale.x * 150, oldLocalScale.y * 150, 1);
+			part.layer = 5;
+			part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder;
+			part.GetComponent<SpriteRenderer> ().sortingLayerName = "UI";
+
 			if (part.GetComponent<FollowMouse> ()) {
 				part.GetComponent<FollowMouse> ().enabled = false;
 			}
 				
-			part.GetComponent<SpriteRenderer> ().sortingLayerName = "UI";
-			part.layer = 5;
-			part.GetComponent<SpriteRenderer> ().sortingOrder = part.GetComponent<AttachToPlayer> ().sortingOrder;
+			if (part.GetComponent<AttachToPlayer> ().aboveOrBelow == "above") {
+				part.GetComponent<SpriteRenderer> ().sortingOrder += 100;
+			} else if (part.GetComponent<AttachToPlayer> ().aboveOrBelow == "below") {
+				part.GetComponent<SpriteRenderer> ().sortingOrder -= 100;
+			}
+
 			part.transform.localScale = new Vector3 (oldLocalScale.x * 150f, oldLocalScale.y * 150f, 1);
 			part.GetComponent<SpriteRenderer> ().material = unlit;
 
