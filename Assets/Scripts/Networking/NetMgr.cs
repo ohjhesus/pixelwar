@@ -9,7 +9,9 @@ public class NetMgr : Photon.MonoBehaviour {
 	public bool dontDestroyOnLoad = true;
 	private int playerCount = 0;
 	private Color playerColor;
+	private string playerName;
 	public Color[] playerColors;
+	public int startingPixels = 60;
 	public GameObject localPlayer;
 
 	private bool hasJoinedLobby = false;
@@ -24,12 +26,10 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void OnEnable () {
 		SceneManager.sceneLoaded += OnLevelLoaded;
-		PhotonNetwork.OnEventCall += OnEvent;
 	}
 
 	private void OnDisable() {
 		SceneManager.sceneLoaded -= OnLevelLoaded;
-		PhotonNetwork.OnEventCall -= OnEvent;
 	}
 
 	// PLAYER CONNECTIONS
@@ -104,24 +104,16 @@ public class NetMgr : Photon.MonoBehaviour {
 			playerCount++;
 		}
 
-		player.name = "player" + playerCount;
-		player.GetComponent<Player>().pixels = 60;
+		if (PhotonNetwork.isMasterClient) {
+			playerName = "player" + playerCount;
+			playerColor = playerColors[playerCount - 1];
 
-		playerColor = playerColors[playerCount - 1];
-
-		player.GetComponent<Renderer>().material.color = playerColor;
+			player.GetPhotonView().RPC("SetupPlayer", PhotonTargets.AllBufferedViaServer, playerName, playerColor, startingPixels);
+		}
 	}
 
 	private void Respawn() {
 		PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player);
 		SpawnPlayer();
-	}
-
-	// RPCs
-
-	private void OnEvent (byte eventCode, object content, int senderid) {
-		if (eventCode == 0) { // increment playerCount
-			playerCount++;
-		}
 	}
 }
