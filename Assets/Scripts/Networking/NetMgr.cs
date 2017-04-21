@@ -7,10 +7,10 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	public string gameVersion = "1.0.0";
 	public bool dontDestroyOnLoad = true;
-	private int playerCount = 1;
+	private int playerCount = 0;
 	private Color playerColor;
 	public Color[] playerColors;
-	public GameObject playerPrefab;
+	public GameObject localPlayer;
 
 	private bool hasJoinedLobby = false;
 
@@ -24,16 +24,22 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void OnEnable () {
 		SceneManager.sceneLoaded += OnLevelLoaded;
+		PhotonNetwork.OnEventCall += OnEvent;
 	}
 
 	private void OnDisable() {
 		SceneManager.sceneLoaded -= OnLevelLoaded;
+		PhotonNetwork.OnEventCall -= OnEvent;
 	}
 
 	// PLAYER CONNECTIONS
 
 	private void Connect () {
 		PhotonNetwork.ConnectUsingSettings(gameVersion);
+	}
+
+	private void OnPhotonPlayerConnected (PhotonPlayer connected) {
+		Debug.Log("NET: Player connected");
 	}
 
 	private void OnPhotonPlayerDisconnected() {
@@ -86,16 +92,24 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void SpawnPlayer () {
 		GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
-		Transform currentSpawnPoint = spawns[playerCount - 1].transform;
+		Transform currentSpawnPoint = spawns[playerCount].transform;
 
 		GameObject player = PhotonNetwork.Instantiate("Player", currentSpawnPoint.position, currentSpawnPoint.rotation, 0);
+		if (player.GetComponent<PhotonView>().isMine) {
+			localPlayer = player;
+		}
+
+		playerCount = 0;
+		foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+			playerCount++;
+		}
+
 		player.name = "player" + playerCount;
 		player.GetComponent<Player>().pixels = 60;
 
 		playerColor = playerColors[playerCount - 1];
 
 		player.GetComponent<Renderer>().material.color = playerColor;
-		playerCount++;
 	}
 
 	private void Respawn() {
@@ -103,7 +117,11 @@ public class NetMgr : Photon.MonoBehaviour {
 		SpawnPlayer();
 	}
 
-	public void StartGame () {
-		
+	// RPCs
+
+	private void OnEvent (byte eventCode, object content, int senderid) {
+		if (eventCode == 0) { // increment playerCount
+			playerCount++;
+		}
 	}
 }

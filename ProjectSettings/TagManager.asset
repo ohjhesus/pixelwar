@@ -19,6 +19,7 @@ TagManager:
   - Mine
   - Special
   - PlayerSpawn
+  - NetMgr
   layers:
   - Default
   - TransparentFX

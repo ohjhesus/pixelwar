@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 216375083}
   m_Layer: 0
   m_Name: NetworkManager
-  m_TagString: Untagged
+  m_TagString: NetMgr
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
   - {r: 1, g: 0.39215687, b: 0.39215687, a: 1}
   - {r: 0, g: 0.5882353, b: 0.78431374, a: 1}
   - {r: 1, g: 1, b: 0.39215687, a: 1}
-  playerPrefab: {fileID: 113828, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
+  localPlayer: {fileID: 0}
 --- !u!4 &216375084
 Transform:
   m_ObjectHideFlags: 0

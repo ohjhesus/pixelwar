@@ -10,7 +10,10 @@ public class CameraFollow : MonoBehaviour {
 	private bool foundPlayer;
 	private bool isShaking;
 
+	private NetMgr netMgr;
+
 	void Start () {
+		netMgr = GameObject.FindGameObjectWithTag("NetMgr").GetComponent<NetMgr>();
 		foundPlayer = false;
 		isShaking = false;
 	}
@@ -26,17 +29,12 @@ public class CameraFollow : MonoBehaviour {
 	}
 
 	void FindPlayer () {
-		bool tempFoundPlayer = false;
-		foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
-//			Debug.Log ("Local player found");
-			player = go;
-			tempFoundPlayer = true;
-		}
-
-		if (tempFoundPlayer) {
+		if (netMgr.localPlayer != null) {
+			player = netMgr.localPlayer;
 			foundPlayer = true;
+		} else {
+			foundPlayer = false;
 		}
-		tempFoundPlayer = false;
 	}
 
 	public IEnumerator LerpShake (float start, float end, float lerpTime) {
