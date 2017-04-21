@@ -8,7 +8,7 @@ public class Anchor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		builderPanel = GameObject.Find ("GameControllers").GetComponent<Builder> ().builderPanel;
+		builderPanel = GameObject.Find ("GameManager").GetComponent<Builder> ().builderPanel;
 	}
 
 	// Update is called once per frame

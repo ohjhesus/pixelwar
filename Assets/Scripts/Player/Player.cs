@@ -43,9 +43,9 @@ public class Player : MonoBehaviour {
 		transform.FindChild ("HealthBar").gameObject.SetActive (false);
 		transform.FindChild ("PlayerName").gameObject.SetActive (false);
 
-		pauseMenu = GameObject.Find ("GameControllers").GetComponent<Pause> ().pausePanel;
-		builderMenu = GameObject.Find ("GameControllers").GetComponent<Builder> ().builderPanel;
-		options = GameObject.Find ("GameControllers").GetComponent<Options> ();
+		pauseMenu = GameObject.Find ("GameManager").GetComponent<Pause> ().pausePanel;
+		builderMenu = GameObject.Find ("GameManager").GetComponent<Builder> ().builderPanel;
+		options = GameObject.Find ("GameManager").GetComponent<Options> ();
 		rib = GetComponent<Rigidbody2D> ();
 		shootScripts = new List<Shoot> ();
 		canFadeIn = true;

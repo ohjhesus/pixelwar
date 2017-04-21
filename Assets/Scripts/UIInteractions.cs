@@ -10,7 +10,7 @@ public class UIInteractions : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		options = GameObject.Find ("GameControllers").GetComponent<Options> ();
+		options = GameObject.Find ("GameManager").GetComponent<Options> ();
 
 		if (GetComponent<Toggle> ()) {
 			GetComponent<Toggle> ().isOn = options.GetBool (ppVar);
