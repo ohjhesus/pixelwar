@@ -15,8 +15,7 @@ public class PixelMoveTowards : MonoBehaviour {
 		CheckDistance ();
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void FixesUpdate () {
 //		Debug.Log ("closest player: " + closestPlayer);
 		moveDistance = Vector2.Distance (new Vector2 (closestPlayer.transform.position.x, closestPlayer.transform.position.y), new Vector2 (transform.position.x, transform.position.y));
 		if (moveDistance <= 4f) {

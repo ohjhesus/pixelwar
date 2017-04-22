@@ -19,8 +19,11 @@ public class Builder : MonoBehaviour {
 
     private bool bloomWasOn;
 
+	private NetMgr netMgr;
+
     // Use this for initialization
     void Start () {
+		netMgr = GameObject.Find("NetworkManager").GetComponent<NetMgr>();
 		builderPanel.SetActive (false);
 		builderPanelBackground.SetActive(false);
 	}
@@ -34,7 +37,7 @@ public class Builder : MonoBehaviour {
 
 
 		if (Input.GetKeyDown (KeyCode.LeftShift) || Input.GetKeyDown (KeyCode.RightShift)) {
-			localPlayer = GameObject.Find("player1");
+			localPlayer = netMgr.localPlayer;
 			if (localPlayer != null) {
 				if (builderPanel.activeInHierarchy) {
 					BuildPlayer();
@@ -97,7 +100,7 @@ public class Builder : MonoBehaviour {
 	}
 
 	public void BuildPlayer () {
-		localPlayer = GameObject.Find("player1");
+		localPlayer = netMgr.localPlayer;
 		/*foreach (GameObject go in GameObject.FindGameObjectsWithTag ("Attachment")) {
 			if (go.GetComponent<AttachToPlayer> ().target = localPlayer.transform) {
 				if (go.GetComponent<Shoot> ()) {

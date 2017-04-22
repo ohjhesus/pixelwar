@@ -6,9 +6,11 @@ using System.Collections;
 public class PixelsCounter : MonoBehaviour {
 
 	private GameObject player;
+	private NetMgr netMgr;
 
 	void Start () {
-		player = GameObject.Find("player1");
+		netMgr = GameObject.Find("NetworkManager").GetComponent<NetMgr>();
+		player = netMgr.localPlayer;
 	}
 
 	void Update () {
@@ -16,7 +18,7 @@ public class PixelsCounter : MonoBehaviour {
 			GetComponent<Text> ().text = player.GetComponent<Player> ().pixels + " PIXELS";
             GetComponentInParent<Image>().enabled = true;
         } else {
-			player = GameObject.Find("player1");
+			player = netMgr.localPlayer;
 			GetComponent<Text>().text = "";
 			GetComponentInParent<Image>().enabled = false;
 		}

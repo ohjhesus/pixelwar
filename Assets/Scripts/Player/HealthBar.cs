@@ -9,8 +9,12 @@ public class HealthBar : MonoBehaviour {
 	private float health;
 	private Image img;
 
+	private NetMgr netMgr;
+
 	void Start () {
-		player = GameObject.Find("player1");
+		netMgr = GameObject.Find("NetworkManager").GetComponent<NetMgr>();
+
+		player = netMgr.localPlayer;
 		img = GetComponent<Image> ();
 	}
 
@@ -21,7 +25,7 @@ public class HealthBar : MonoBehaviour {
 		// Debug.Log(img.material.GetFloat("_Cutoff"));
 
 		if (player == null) {
-			player = GameObject.Find("player1");
+			player = netMgr.localPlayer;
 			return;
 		}
 

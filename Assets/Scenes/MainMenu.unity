@@ -316,11 +316,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameVersion: 1.0.0
   dontDestroyOnLoad: 1
-  playerColors:
-  - {r: 0.39215687, g: 0.8627451, b: 0.39215687, a: 1}
-  - {r: 1, g: 0.39215687, b: 0.39215687, a: 1}
-  - {r: 0, g: 0.5882353, b: 0.78431374, a: 1}
-  - {r: 1, g: 1, b: 0.39215687, a: 1}
+  playerCount: 0
+  startingPixels: 60
   localPlayer: {fileID: 0}
 --- !u!4 &216375084
 Transform:
@@ -453,7 +450,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.066176474, g: 0.066176474, b: 0.066176474, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -617,12 +614,12 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -646,106 +643,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1001 &1541899481
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 449.5741
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 332.5275
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 485970, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114377574742250876, guid: f4b0899e248d24a54815f6e8d626385b,
-        type: 2}
-      propertyPath: viewIdField
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114377574742250876, guid: f4b0899e248d24a54815f6e8d626385b,
-        type: 2}
-      propertyPath: instantiationId
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-  m_IsPrefabParent: 0
---- !u!1 &1541899482 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 113828, guid: f4b0899e248d24a54815f6e8d626385b, type: 2}
-  m_PrefabInternal: {fileID: 1541899481}
---- !u!114 &1541899483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1541899482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc1dc5e3d7667474dac86f47fd91f4f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myColor: {r: 0, g: 0, b: 0, a: 0}
---- !u!114 &1541899484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1541899482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 244
-    i1: 176
-    i2: 137
-    i3: 158
-    i4: 36
-    i5: 141
-    i6: 36
-    i7: 165
-    i8: 72
-    i9: 21
-    i10: 246
-    i11: 232
-    i12: 214
-    i13: 38
-    i14: 56
-    i15: 91
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!1 &1718631830
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,10 +7,7 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	public string gameVersion = "1.0.0";
 	public bool dontDestroyOnLoad = true;
-	private int playerCount = 0;
-	private Color playerColor;
-	private string playerName;
-	public Color[] playerColors;
+	public int playerCount = 0;
 	public int startingPixels = 60;
 	public GameObject localPlayer;
 
@@ -40,6 +37,16 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void OnPhotonPlayerConnected (PhotonPlayer connected) {
 		Debug.Log("NET: Player connected");
+
+		playerCount++;
+
+		if (PhotonNetwork.isMasterClient) {
+			
+		}
+		/*playerName = "player" + playerCount;
+		playerColor = playerColors[playerCount - 1];
+
+		player.GetPhotonView().RPC("SetupPlayer", PhotonTargets.AllBufferedViaServer, playerName, playerColor.r, playerColor.g, playerColor.b, startingPixels);*/
 	}
 
 	private void OnPhotonPlayerDisconnected() {
@@ -91,24 +98,12 @@ public class NetMgr : Photon.MonoBehaviour {
 	// PLAYER SPAWNING / RESPAWNING
 
 	private void SpawnPlayer () {
-		GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
-		Transform currentSpawnPoint = spawns[playerCount].transform;
-
-		GameObject player = PhotonNetwork.Instantiate("Player", currentSpawnPoint.position, currentSpawnPoint.rotation, 0);
+		GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+		playerCount++;
+		//player.GetPhotonView().RPC("CountPlayer", PhotonTargets.MasterClient, startingPixels);
 		if (player.GetComponent<PhotonView>().isMine) {
 			localPlayer = player;
-		}
-
-		playerCount = 0;
-		foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
-			playerCount++;
-		}
-
-		if (PhotonNetwork.isMasterClient) {
-			playerName = "player" + playerCount;
-			playerColor = playerColors[playerCount - 1];
-
-			player.GetPhotonView().RPC("SetupPlayer", PhotonTargets.AllBufferedViaServer, playerName, playerColor, startingPixels);
+			player.GetComponent<PlayerSetupSync>().BeginSetup(startingPixels);
 		}
 	}
 

@@ -7,7 +7,11 @@ public class FollowMouse : MonoBehaviour {
 	private GameObject localPlayer;
 	private bool canStart;
 
+	private NetMgr netMgr;
+
 	void Start () {
+		netMgr = GameObject.Find("NetworkManager").GetComponent<NetMgr>();
+
 		StartCoroutine (WaitForPlayer ());
 	}
 
@@ -22,7 +26,7 @@ public class FollowMouse : MonoBehaviour {
 
 	IEnumerator WaitForPlayer () {
 		while (localPlayer == null) {
-			localPlayer = GameObject.Find("player1");
+			localPlayer = netMgr.localPlayer;
 			yield return new WaitForSeconds (0);
 		}
 

@@ -62,20 +62,20 @@ public class Player : Photon.MonoBehaviour {
 			canFadeIn = true;
 		}
 
-		if (photonView.isMine) {
-			if (Input.GetMouseButton(0)) {
-				if (!pauseMenu.activeInHierarchy && !builderMenu.activeInHierarchy) {
+		if (!photonView.isMine) return;
 
-					foreach (Shoot shootScript in shootScripts) {
-						if (shootScript.canShoot) {
-							shootScript.canShoot = false;
-							shootScript.gameObject.GetComponent<AudioSource>().PlayOneShot(shootScript.gameObject.GetComponent<AudioSource>().clip, shootScript.gameObject.GetComponent<AudioSource>().volume);
-							if (options.chromaticAberration) {
-								StartCoroutine(shootScript.FadeAberration());
-							}
-							Fire(shootScripts.IndexOf(shootScript));
-							StartCoroutine(shootScript.Cooldown());
+		if (Input.GetMouseButton(0)) {
+			if (!pauseMenu.activeInHierarchy && !builderMenu.activeInHierarchy) {
+
+				foreach (Shoot shootScript in shootScripts) {
+					if (shootScript.canShoot) {
+						shootScript.canShoot = false;
+						shootScript.gameObject.GetComponent<AudioSource>().PlayOneShot(shootScript.gameObject.GetComponent<AudioSource>().clip, shootScript.gameObject.GetComponent<AudioSource>().volume);
+						if (options.chromaticAberration) {
+							StartCoroutine(shootScript.FadeAberration());
 						}
+						Fire(shootScripts.IndexOf(shootScript));
+						StartCoroutine(shootScript.Cooldown());
 					}
 				}
 			}
@@ -83,34 +83,34 @@ public class Player : Photon.MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		if (photonView.isMine) {
-			if (outOfArena) {
-				Vector2 direction = (-transform.position).normalized;
-				GetComponent<Rigidbody2D>().AddForce(direction * 7.5f);
-			}
+		if (!photonView.isMine) return;
 
-			if (!pauseMenu.activeInHierarchy && !builderMenu.activeInHierarchy) {
-				if (Input.GetKey("w")) {
-					rib.AddRelativeForce(new Vector2(0, totalSpeed));
-					movingForwards = true;
-				} else {
-					movingForwards = false;
-				}
+		if (outOfArena) {
+			Vector2 direction = (-transform.position).normalized;
+			GetComponent<Rigidbody2D>().AddForce(direction * 7.5f);
+		}
 
-				if (Input.GetKey("s")) {
-					rib.AddRelativeForce(new Vector2(0, (-totalSpeed / 4)));
-				}
-
-				if (Input.GetKey("a")) {
-					rib.AddTorque(totalTurnSpeed);
-				}
-
-				if (Input.GetKey("d")) {
-					rib.AddTorque(-totalTurnSpeed);
-				}
+		if (!pauseMenu.activeInHierarchy && !builderMenu.activeInHierarchy) {
+			if (Input.GetKey("w")) {
+				rib.AddRelativeForce(new Vector2(0, totalSpeed));
+				movingForwards = true;
 			} else {
 				movingForwards = false;
 			}
+
+			if (Input.GetKey("s")) {
+				rib.AddRelativeForce(new Vector2(0, (-totalSpeed / 4)));
+			}
+
+			if (Input.GetKey("a")) {
+				rib.AddTorque(totalTurnSpeed);
+			}
+
+			if (Input.GetKey("d")) {
+				rib.AddTorque(-totalTurnSpeed);
+			}
+		} else {
+			movingForwards = false;
 		}
 	}
 
@@ -155,27 +155,27 @@ public class Player : Photon.MonoBehaviour {
 	}
 
 	public void Fire (int shootScriptIndex) {
-		if (photonView.isMine) {
-			Shoot shootScript = shootScripts[shootScriptIndex];
+		if (!photonView.isMine) return;
 
-			GameObject shot = (GameObject)Instantiate(shootScript.projectile, shootScript.gameObject.transform.position + (shootScript.gameObject.transform.up / 3), shootScript.gameObject.transform.rotation);
-			shot.name = name + shootScript.projectile.name;
-			shot.tag = "Projectile";
-			shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier;
-			shot.GetComponent<Projectile>().torque = shootScript.projectileTorque;
-			shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10;
-			shot.GetComponent<Projectile>().damage = shootScript.projectileDamage;
-			shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance;
+		Shoot shootScript = shootScripts[shootScriptIndex];
 
-			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-			foreach (GameObject attachment in attachments) {
-				Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), attachment.GetComponent<Collider2D>());
-			}
+		GameObject shot = (GameObject)Instantiate(shootScript.projectile, shootScript.gameObject.transform.position + (shootScript.gameObject.transform.up / 3), shootScript.gameObject.transform.rotation);
+		shot.name = name + shootScript.projectile.name;
+		shot.tag = "Projectile";
+		shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier;
+		shot.GetComponent<Projectile>().torque = shootScript.projectileTorque;
+		shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10;
+		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage;
+		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance;
 
-			GameObject[] otherProjectiles = GameObject.FindGameObjectsWithTag("Projectile");
-			foreach (GameObject go in otherProjectiles) {
-				Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), go.GetComponent<Collider2D>());
-			}
+		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+		foreach (GameObject attachment in attachments) {
+			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), attachment.GetComponent<Collider2D>());
+		}
+
+		GameObject[] otherProjectiles = GameObject.FindGameObjectsWithTag("Projectile");
+		foreach (GameObject go in otherProjectiles) {
+			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), go.GetComponent<Collider2D>());
 		}
 	}
 
