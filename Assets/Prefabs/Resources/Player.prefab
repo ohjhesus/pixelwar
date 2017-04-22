@@ -458,6 +458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c425df858b2d42ea856a3664c74cdfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 0}
 --- !u!114 &11432814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -968,6 +969,7 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 114273980911352384}
+  - {fileID: 11479154}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

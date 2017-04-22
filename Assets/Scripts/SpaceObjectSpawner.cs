@@ -13,7 +13,7 @@ public class SpaceObjectSpawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		spaceObjects = Resources.LoadAll ("SpaceObjects");
+		spaceObjects = Resources.LoadAll ("SpaceObjects/Resources");
 		canSpawn = false;
 		StartCoroutine (Cooldown ());
 	}

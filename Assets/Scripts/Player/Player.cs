@@ -31,6 +31,15 @@ public class Player : Photon.MonoBehaviour {
 
 	public List<GameObject> attachments;
 
+	// Sync player pixels
+	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+		if (stream.isWriting) {
+			stream.SendNext(pixels);
+		} else {
+			pixels = (int)stream.ReceiveNext();
+		}
+	}
+
 	void Start () {
 		if (photonView.isMine) {
 			transform.FindChild("HealthBar").gameObject.SetActive(false);
@@ -124,11 +133,9 @@ public class Player : Photon.MonoBehaviour {
     }
 
 	public void SpawnAttachment (string bAName, float posX, float posY) {
-		Object loadedAttachment = Resources.Load ("Attachments/" + bAName);
-		GameObject attachment = (GameObject)Instantiate (loadedAttachment, transform.position, transform.rotation);
-//		Vector3 oldScale = attachment.transform.localScale;
-//		attachment.transform.parent = transform;
-//		attachment.transform.lossyScale = oldScale;
+		//Object loadedAttachment = Resources.Load ("Attachments/" + bAName);
+		//GameObject attachment = (GameObject)Instantiate (loadedAttachment, transform.position, transform.rotation);
+		GameObject attachment = PhotonNetwork.Instantiate(bAName, transform.position, transform.rotation, 0);
 		attachment.transform.SetParent(transform);
 		attachment.GetComponent<AttachToPlayer> ().localPos = new Vector3 (posX, posY, 0);
 		attachment.transform.localPosition = attachment.GetComponent<AttachToPlayer> ().localPos;
