@@ -47,4 +47,6 @@ MonoBehaviour:
   - SetPlayerVars
   - SetupPlayer
   - CountPlayer
+  - CreateExplosion
+  - SetupSO
   DisableAutoOpenWizard: 1

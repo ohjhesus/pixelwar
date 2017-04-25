@@ -18,6 +18,7 @@ public class Builder : MonoBehaviour {
     private Material attachmentMat;
 
     private bool bloomWasOn;
+	private bool chromicAberrationWasOn;
 
 	private NetMgr netMgr;
 
@@ -53,7 +54,10 @@ public class Builder : MonoBehaviour {
 		builderPanelBackground.SetActive(true);
 		bloomWasOn = Camera.main.GetComponent<BloomOptimized>().enabled;
 		Camera.main.GetComponent<BloomOptimized>().enabled = false;
-        //localPlayer = GameObject.Find("player1");
+
+		chromicAberrationWasOn = Camera.main.GetComponent<VignetteAndChromaticAberration>().enabled;
+		Camera.main.GetComponent<VignetteAndChromaticAberration>().enabled = false;
+		//localPlayer = GameObject.Find("player1");
 		pr.pixelsRemaining = localPlayer.GetComponent<Player> ().pixels;
 		pr.UpdateCounter ();
 		GetComponent<Pause> ().pausePanel.SetActive (false);
@@ -95,7 +99,8 @@ public class Builder : MonoBehaviour {
     public void CloseBuilder()
     {
 		Camera.main.GetComponent<BloomOptimized>().enabled = bloomWasOn;
-        builderPanel.SetActive(false);
+		Camera.main.GetComponent<VignetteAndChromaticAberration>().enabled = chromicAberrationWasOn;
+		builderPanel.SetActive(false);
 		builderPanelBackground.SetActive(false);
 	}
 

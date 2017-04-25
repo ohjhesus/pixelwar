@@ -3,25 +3,29 @@ using System.Collections;
 
 public class SpaceObject : MonoBehaviour {
 
+	[HideInInspector] public Vector2 direction;
 	[HideInInspector] public float size;
 	[HideInInspector] public int health;
-	[HideInInspector] public Vector2 direction;
 	[HideInInspector] public float speed;
 	[HideInInspector] public float rotSpeed;
 
-	private Rigidbody2D rib;
+	public float minSize = 0.5f;
+	public float maxSize = 2f;
+	public float minSpeed = 10f;
+	public float maxSpeed = 50f;
 
-	private Object pixelOne;
-	private Object pixelFive;
-	private Object pixelTen;
+	private Rigidbody2D rib;
 
 	// Use this for initialization
 	void Start () {
-		LoadPixels ();
-		transform.localScale = new Vector3 (size, size, 1);
-		rib = GetComponent<Rigidbody2D> ();
-		rib.AddForce (direction.normalized * speed, ForceMode2D.Impulse);
-		rib.AddTorque (rotSpeed / 100);
+		
+	}
+
+	void FinishedSetup () {
+		transform.localScale = new Vector3(size, size, 1);
+		rib = GetComponent<Rigidbody2D>();
+		rib.AddForce(direction.normalized * speed, ForceMode2D.Impulse);
+		rib.AddTorque(rotSpeed / 100);
 	}
 
 	// Update is called once per frame
@@ -34,26 +38,20 @@ public class SpaceObject : MonoBehaviour {
 		}
 	}
 
-	void LoadPixels () {
-		pixelOne = Resources.Load ("Pixels/1");
-		pixelFive = Resources.Load ("Pixels/5");
-		pixelTen = Resources.Load ("Pixels/10");
-	}
-
 	public void SpawnPixels (int amount) {
 //		Debug.Log (amount);
 		while (amount >= 10) {
-			GameObject pt = (GameObject)Instantiate (pixelTen, new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation);
+			GameObject pt = (GameObject)PhotonNetwork.Instantiate ("10Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0);
 			pt.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
 			amount -= 10;
 		}
 		while (amount >= 5) {
-			GameObject pf = (GameObject)Instantiate (pixelFive, new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation);
+			GameObject pf = (GameObject)PhotonNetwork.Instantiate ("5Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0);
 			pf.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
 			amount -= 5;
 		}
 		while (amount >= 1) {
-			GameObject po = (GameObject)Instantiate (pixelOne, new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation);
+			GameObject po = (GameObject)PhotonNetwork.Instantiate ("1Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0);
 			po.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
 			amount -= 1;
 		}
@@ -71,7 +69,7 @@ public class SpaceObject : MonoBehaviour {
 			if (amount != -42069) {
 				SpawnPixels (Mathf.FloorToInt (size * 10));
 			}
-			Destroy(gameObject);
+			PhotonNetwork.Destroy(gameObject);
 		}
 	}
 
@@ -80,5 +78,28 @@ public class SpaceObject : MonoBehaviour {
 			AffectHealth (coll.gameObject.GetComponent<Projectile> ().damage);
 			coll.gameObject.GetComponent<Projectile> ().Explode();
 		}
+	}
+
+	// RPCs
+
+	[PunRPC]
+	public void SetupSO (Vector2 tempDirection, float tempSize, int tempHealth, float tempSpeed, float tempRotSpeed) {
+		//spaceObject.tag = "SpaceObject";
+		direction = tempDirection;
+		size = tempSize;
+		speed = tempSpeed;
+		health = tempHealth;
+		rotSpeed = tempRotSpeed;
+
+		//Log spaceObject stats
+		Debug.Log("spawning space object - size: " + size + "; health: " + health + "; speed: " + speed + "; torque: " + rotSpeed);
+
+		//Begin movement
+		FinishedSetup();
+	}
+
+	[PunRPC]
+	void CreateExplosion () {
+
 	}
 }

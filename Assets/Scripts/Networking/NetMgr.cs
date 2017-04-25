@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class NetMgr : Photon.MonoBehaviour {
 
 	public string gameVersion = "1.0.0";
+	public bool offlineMode = false;
 	public bool dontDestroyOnLoad = true;
 	public int startingPixels = 60;
 	public GameObject localPlayer;
@@ -13,7 +14,12 @@ public class NetMgr : Photon.MonoBehaviour {
 	private bool hasJoinedLobby = false;
 
 	private void Start() {
-		Connect();
+		if (!offlineMode) {
+			Connect();
+		} else {
+			PhotonNetwork.offlineMode = true;
+			OnJoinedLobby();
+		}
 
 		if (dontDestroyOnLoad) {
 			DontDestroyOnLoad(gameObject);

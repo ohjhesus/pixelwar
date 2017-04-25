@@ -3,9 +3,10 @@ using System.Collections;
 
 class PlayerSetupSync : Photon.MonoBehaviour {
 	[HideInInspector] public int playerCount = 0;
+	public Color[] playerColors = { }; //100, 220, 100 // 255, 100, 100 // 0, 150, 200 // 255, 255, 100
+
 	public Color currentColor;
-	public string currentName; 
-	public Color[] playerColors;
+	public string currentName;
 
 	public void BeginSetup (int startingPixels) {
 		playerCount = PhotonNetwork.playerList.Length;
@@ -16,7 +17,10 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 	[PunRPC]
 	void SetupPlayer (int numberOfPlayers, int startingPixels) {
 		currentName = "Player" + numberOfPlayers;
+
 		currentColor = playerColors[numberOfPlayers - 1];
+		currentColor.a = 1.0f;
+
 		GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
 		Transform currentSpawnPoint = spawns[numberOfPlayers].transform;
 

@@ -315,9 +315,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameVersion: 1.0.0
+  offlineMode: 0
   dontDestroyOnLoad: 1
-  playerCount: 0
   startingPixels: 60
+  playerColors:
+  - {r: 0.39215687, g: 0.8627451, b: 0.39215687, a: 0}
+  - {r: 1, g: 0.39215687, b: 0.39215687, a: 0}
+  - {r: 0, g: 0.5882353, b: 0.78431374, a: 0}
+  - {r: 1, g: 1, b: 0.39215687, a: 0}
   localPlayer: {fileID: 0}
 --- !u!4 &216375084
 Transform:
