@@ -136,28 +136,35 @@ public class Player : Photon.MonoBehaviour {
 		//Object loadedAttachment = Resources.Load ("Attachments/" + bAName);
 		//GameObject attachment = (GameObject)Instantiate (loadedAttachment, transform.position, transform.rotation);
 		GameObject attachment = PhotonNetwork.Instantiate(bAName, transform.position, transform.rotation, 0);
+
+		photonView.RPC("ConfigureAttachment", PhotonTargets.AllBufferedViaServer, attachment.GetPhotonView().viewID, posX, posY);
+	}
+
+	[PunRPC]
+	void ConfigureAttachment (int attViewID, float posX, float posY) {
+		GameObject attachment = PhotonView.Find(attViewID).gameObject;
 		attachment.transform.SetParent(transform);
-		attachment.GetComponent<AttachToPlayer> ().localPos = new Vector3 (posX, posY, 0);
-		attachment.transform.localPosition = attachment.GetComponent<AttachToPlayer> ().localPos;
-		attachment.GetComponent<AttachToPlayer> ().target = transform;
-		attachment.GetComponent<AttachToPlayer> ().original = Resources.Load ("Attachments/" + attachment.name.Replace ("(Clone)", "").Trim ());
+		attachment.GetComponent<AttachToPlayer>().localPos = new Vector3(posX, posY, 0);
+		attachment.transform.localPosition = attachment.GetComponent<AttachToPlayer>().localPos;
+		attachment.GetComponent<AttachToPlayer>().target = transform;
+		attachment.GetComponent<AttachToPlayer>().original = Resources.Load("Attachments/Resources/" + attachment.name.Replace("(Clone)", "").Trim());
 		attachment.tag = "Attachment";
-		string tempName = attachment.name.Replace ("(Clone)", "").Trim ();
-		if (attachment.GetComponent<AttachToPlayer> ().sameColorAsShip) {
-			attachment.GetComponent<SpriteRenderer> ().material.color = GetComponent<SpriteRenderer> ().material.color;
+		string tempName = attachment.name.Replace("(Clone)", "").Trim();
+		if (attachment.GetComponent<AttachToPlayer>().sameColorAsShip) {
+			attachment.GetComponent<SpriteRenderer>().material.color = GetComponent<SpriteRenderer>().material.color;
 		}
 		attachment.name = name + tempName + attachmentCount;
 		attachmentCount++;
 
-		Physics2D.IgnoreCollision (attachment.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
+		Physics2D.IgnoreCollision(attachment.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 		foreach (Transform child in transform) {
-			if (child.gameObject != attachment && child.GetComponent<Collider2D> ()) {
-				Physics2D.IgnoreCollision (attachment.GetComponent<Collider2D> (), child.GetComponent<Collider2D> ());
+			if (child.gameObject != attachment && child.GetComponent<Collider2D>()) {
+				Physics2D.IgnoreCollision(attachment.GetComponent<Collider2D>(), child.GetComponent<Collider2D>());
 			}
 		}
 
-		if (attachment.GetComponent<Shoot> ()) {
-			shootScripts.Add (attachment.GetComponent<Shoot> ());
+		if (attachment.GetComponent<Shoot>()) {
+			shootScripts.Add(attachment.GetComponent<Shoot>());
 		}
 	}
 

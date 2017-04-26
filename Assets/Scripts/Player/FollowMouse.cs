@@ -2,21 +2,23 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FollowMouse : MonoBehaviour {
+public class FollowMouse : Photon.MonoBehaviour {
 
-	private GameObject localPlayer;
-	private bool canStart;
+	//private GameObject localPlayer;
+	private bool canStart = true;
 
-	private NetMgr netMgr;
+	//private NetMgr netMgr;
 
 	void Start () {
-		netMgr = GameObject.Find("NetworkManager").GetComponent<NetMgr>();
+		//netMgr = GameObject.Find("NetworkManager").GetComponent<NetMgr>();
 
-		StartCoroutine (WaitForPlayer ());
+		//StartCoroutine (WaitForPlayer ());
 	}
 
 	void Update () {
-		if (canStart) {
+		if (!photonView.isMine) return;
+
+			if (canStart) {
 			Vector3 diff = Camera.main.ScreenToWorldPoint (Input.mousePosition) - transform.position;
 			diff.Normalize ();
 			float rot_z = Mathf.Atan2 (diff.y, diff.x) * Mathf.Rad2Deg;
@@ -24,12 +26,12 @@ public class FollowMouse : MonoBehaviour {
 		}
 	}
 
-	IEnumerator WaitForPlayer () {
-		while (localPlayer == null) {
-			localPlayer = netMgr.localPlayer;
-			yield return new WaitForSeconds (0);
-		}
+	//IEnumerator WaitForPlayer () {
+	//	while (localPlayer == null) {
+	//		localPlayer = netMgr.localPlayer;
+	//		yield return new WaitForSeconds (0);
+	//	}
 
-		canStart = true;
-	}
+	//	canStart = true;
+	//}
 }

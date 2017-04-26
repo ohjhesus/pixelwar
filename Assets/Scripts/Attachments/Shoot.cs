@@ -28,10 +28,6 @@ public class Shoot : MonoBehaviour {
 		GetComponent<AttachToPlayer> ().target.GetComponent<Player> ().shootScripts.Remove (this);
 	}
 
-	void Update () {
-
-	}
-
 	public IEnumerator Cooldown () {
 		yield return new WaitForSeconds (cooldown);
 		canShoot = true;

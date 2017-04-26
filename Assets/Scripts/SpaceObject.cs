@@ -16,6 +16,15 @@ public class SpaceObject : MonoBehaviour {
 
 	private Rigidbody2D rib;
 
+	// Sync SO health
+	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+		if (stream.isWriting) {
+			stream.SendNext(health);
+		} else {
+			health = (int)stream.ReceiveNext();
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		
@@ -69,7 +78,9 @@ public class SpaceObject : MonoBehaviour {
 			if (amount != -42069) {
 				SpawnPixels (Mathf.FloorToInt (size * 10));
 			}
-			PhotonNetwork.Destroy(gameObject);
+			if (PhotonNetwork.isMasterClient) {
+				PhotonNetwork.Destroy(gameObject);
+			}
 		}
 	}
 
