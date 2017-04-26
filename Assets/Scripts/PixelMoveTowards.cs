@@ -9,6 +9,8 @@ public class PixelMoveTowards : MonoBehaviour {
 	private bool canCheckDistance;
 	private float rotationAmount;
 
+	public int pixelsToAdd;
+
 	// Use this for initialization
 	void Start () {
 		rotationAmount = Random.Range (-1f, 1f);
@@ -22,7 +24,17 @@ public class PixelMoveTowards : MonoBehaviour {
 			transform.position = Vector3.MoveTowards (new Vector3 (transform.position.x, transform.position.y, -1), new Vector3 (closestPlayer.transform.position.x, closestPlayer.transform.position.y, -1), (4 - moveDistance) / 100);
 		}
 
-		transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotationAmount - ((4 - moveDistance) * rotationAmount * 2));
+		if (moveDistance <= 1f) {
+			closestPlayer.GetComponent<Player>().AffectHealth(pixelsToAdd);
+			GameObject.FindGameObjectWithTag("GameManager").GetComponent<Builder>().pr.pixelsRemaining += pixelsToAdd;
+			GameObject.FindGameObjectWithTag("GameManager").GetComponent<Builder>().pr.UpdateCounter();
+
+			if (PhotonNetwork.isMasterClient) {
+				PhotonNetwork.Destroy(gameObject);
+			}
+		}
+
+		transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotationAmount - ((4 - moveDistance) * rotationAmount * 5));
 
 		if (canCheckDistance) {
 			canCheckDistance = false;

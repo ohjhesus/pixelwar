@@ -13,15 +13,6 @@ public class PlayerCollisions : MonoBehaviour {
 			GetComponent<Player> ().AffectHealth (coll.gameObject.GetComponent<Projectile> ().damage);
 			
 			coll.gameObject.GetComponent<Projectile> ().Explode ();
-		} else if (coll.gameObject.name.Contains("1Pixel")) {
-			GetComponent<Player> ().AffectHealth (1);
-			PhotonNetwork.Destroy (coll.gameObject);
-		} else if (coll.gameObject.name.Contains("5Pixel")) {
-			GetComponent<Player> ().AffectHealth (5);
-			PhotonNetwork.Destroy (coll.gameObject);
-		} else if (coll.gameObject.name.Contains("10Pixel")) {
-			GetComponent<Player> ().AffectHealth (10);
-			PhotonNetwork.Destroy (coll.gameObject);
 		}
 	}
 }
