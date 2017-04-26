@@ -51,4 +51,5 @@ MonoBehaviour:
   - SetupSO
   - ConfigureAttachment
   - SetupShot
+  - DestroySOWithTrail
   DisableAutoOpenWizard: 1
