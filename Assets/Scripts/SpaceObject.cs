@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class SpaceObject : MonoBehaviour {
+public class SpaceObject : Photon.MonoBehaviour {
 
 	[HideInInspector] public Vector2 direction;
 	[HideInInspector] public float size;
@@ -78,9 +78,24 @@ public class SpaceObject : MonoBehaviour {
 			if (amount != -42069) {
 				SpawnPixels (Mathf.FloorToInt (size * 10));
 			}
-			if (PhotonNetwork.isMasterClient) {
-				PhotonNetwork.Destroy(gameObject);
+			
+			if (transform.FindChild("Trail")) {
+				photonView.RPC("DestroySOWithTrail", PhotonTargets.AllBufferedViaServer);
+			} else {
+				if (PhotonNetwork.isMasterClient) {
+					PhotonNetwork.Destroy(gameObject);
+				}
 			}
+		}
+	}
+
+	[PunRPC]
+	void DestroySOWithTrail () {
+		Destroy(transform.FindChild("Trail"), transform.FindChild("Trail").GetComponent<ParticleSystem>().main.startLifetime.constantMax);
+		transform.FindChild("Trail").SetParent(null);
+
+		if (PhotonNetwork.isMasterClient) {
+			PhotonNetwork.Destroy(gameObject);
 		}
 	}
 
