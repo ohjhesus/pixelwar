@@ -173,7 +173,8 @@ public class Player : Photon.MonoBehaviour {
 
 		Shoot shootScript = shootScripts[shootScriptIndex];
 
-		GameObject shot = PhotonNetwork.Instantiate(shootScript.projectile.name, shootScript.gameObject.transform.position + (shootScript.gameObject.transform.up / 3), shootScript.gameObject.transform.rotation, 0);
+		GameObject shot = PhotonNetwork.Instantiate(shootScript.projectile.name, shootScript.transform.position + (shootScript.transform.up / 3), shootScript.transform.rotation, 0);
+		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 
 		photonView.RPC("SetupShot", PhotonTargets.AllBufferedViaServer, shot.GetPhotonView().viewID, shootScriptIndex);
 	}
@@ -182,9 +183,12 @@ public class Player : Photon.MonoBehaviour {
 	void SetupShot (int shotViewID, int shootScriptIndex) {
 		GameObject shot = PhotonView.Find(shotViewID).gameObject;
 		Shoot shootScript = shootScripts[shootScriptIndex];
+		
+		//Debug.Log(shootScript.gameObject.name);
 
 		shot.name = name + shootScript.projectile.name;
 		shot.tag = "Projectile";
+		shot.transform.rotation = shootScript.transform.rotation;
 		shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier;
 		shot.GetComponent<Projectile>().torque = shootScript.projectileTorque;
 		shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10;

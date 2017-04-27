@@ -91,11 +91,13 @@ public class SpaceObject : Photon.MonoBehaviour {
 
 	[PunRPC]
 	void DestroySOWithTrail () {
-		Destroy(transform.FindChild("Trail"), transform.FindChild("Trail").GetComponent<ParticleSystem>().main.startLifetime.constantMax);
-		transform.FindChild("Trail").SetParent(null);
+		if (transform.FindChild("Trail") != null) {
+			Destroy(transform.FindChild("Trail").gameObject, transform.FindChild("Trail").GetComponent<ParticleSystem>().main.startLifetime.constantMax);
+			transform.FindChild("Trail").SetParent(null);
 
-		if (PhotonNetwork.isMasterClient) {
-			PhotonNetwork.Destroy(gameObject);
+			if (PhotonNetwork.isMasterClient) {
+				PhotonNetwork.Destroy(gameObject);
+			}
 		}
 	}
 

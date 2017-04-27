@@ -15,9 +15,15 @@ public class Projectile : Photon.MonoBehaviour {
 	private Rigidbody2D rib;
 
 	public bool canStart = false;
+
+	private bool canDestroy = false;
+
+	private GameObject explosion;
 	
 	public void StartShot (Shoot shootScript) {
 		transform.rotation.eulerAngles.Set(0, 0, shootScript.transform.eulerAngles.z);
+
+		explosion = transform.FindChild("Explosion").gameObject;
 
 		rib = GetComponent<Rigidbody2D> ();
 		rib.velocity = transform.TransformDirection(new Vector3(0, speed, 0));
@@ -36,14 +42,27 @@ public class Projectile : Photon.MonoBehaviour {
 
 	public void Explode () {
 		photonView.RPC("CreateExplosion", PhotonTargets.AllViaServer);
+
+		StartCoroutine(DestroyProjectile());
 	}
 
 	[PunRPC]
 	void CreateExplosion () {
-		transform.FindChild("Explosion").GetComponent<ProjectileExplosion>().enabled = true;
-		transform.FindChild("Explosion").parent = null;
+		if (explosion != null) {
+			explosion.GetComponent<ProjectileExplosion>().enabled = true;
+			explosion.transform.SetParent(null);
 
+			GetComponent<SpriteRenderer>().enabled = false;
+			rib.velocity = Vector2.zero;
+			GetComponent<Collider2D>().enabled = false;
+
+			//canDestroy = true;
+		}
+	}
+
+	IEnumerator DestroyProjectile () {
 		if (PhotonNetwork.isMasterClient) {
+			yield return new WaitForSeconds(1f);
 			PhotonNetwork.Destroy(gameObject);
 		}
 	}
