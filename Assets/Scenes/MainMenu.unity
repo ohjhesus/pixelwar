@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameVersion: 1.0.0
-  offlineMode: 1
+  offlineMode: 0
   dontDestroyOnLoad: 1
   startingPixels: 60
   localPlayer: {fileID: 0}
