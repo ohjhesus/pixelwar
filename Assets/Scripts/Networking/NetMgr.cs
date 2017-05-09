@@ -6,7 +6,11 @@ using System.Collections.Generic;
 public class NetMgr : Photon.MonoBehaviour {
 
 	public string gameVersion = "1.0.0";
-	public bool offlineMode = false;
+	public string appID = "89eb7daf-04cd-4f1a-8dd1-c141d4b0811d";
+
+	public string serverIP;
+	public int serverPort = 5055;
+
 	public bool dontDestroyOnLoad = true;
 	public int startingPixels = 60;
 	public GameObject localPlayer;
@@ -14,13 +18,6 @@ public class NetMgr : Photon.MonoBehaviour {
 	private bool hasJoinedLobby = false;
 
 	private void Start() {
-		if (!offlineMode) {
-			Connect();
-		} else {
-			PhotonNetwork.offlineMode = true;
-			OnJoinedLobby();
-		}
-
 		if (dontDestroyOnLoad) {
 			DontDestroyOnLoad(gameObject);
 		}
@@ -36,8 +33,14 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	// PLAYER CONNECTIONS
 
-	private void Connect () {
-		PhotonNetwork.ConnectUsingSettings(gameVersion);
+	private void ConnectOnline () {
+		Debug.Log ("NET: Joining Online");
+		PhotonNetwork.ConnectToBestCloudServer (gameVersion);
+	}
+
+	private void ConnectLAN (string address, int port) {
+		Debug.Log ("NET: Joining LAN - " + address + ":" + port);
+		PhotonNetwork.ConnectToMaster (address, port, appID, gameVersion);
 	}
 
 	private void OnPhotonPlayerConnected (PhotonPlayer connected) {
@@ -69,7 +72,7 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	// JOIN RANDOM ROOM
 
-	public void JoinRandomRoom () {
+	private void JoinRandomRoom () {
 		if (hasJoinedLobby) {
 			Debug.Log("NET: Joining random room");
 			PhotonNetwork.JoinRandomRoom();
@@ -78,9 +81,27 @@ public class NetMgr : Photon.MonoBehaviour {
 		}
 	}
 
-	public void OnPhotonRandomJoinFailed() {
+	private void OnPhotonRandomJoinFailed() {
 		Debug.Log("NET: Failed joining random room");
 		CreateRoom();
+	}
+
+	// BUTTON HANDLERS
+
+	public void StartOnlineMultiplayer () {
+		ConnectOnline ();
+	}
+
+	public void StartLANMultiplayer (string address, int port) {
+		Debug.Log("start lan");
+		serverIP = address;
+		serverPort = port;
+		ConnectLAN (address, port);
+	}
+
+	public void StartOffline () {
+		PhotonNetwork.offlineMode = true;
+		OnJoinedLobby ();
 	}
 
 	// JOIN LOBBY
@@ -88,6 +109,7 @@ public class NetMgr : Photon.MonoBehaviour {
 	private void OnJoinedLobby () {
 		Debug.Log("NET: Joined lobby");
 		hasJoinedLobby = true;
+		JoinRandomRoom ();
 	}
 
 	// PLAYER SPAWNING / RESPAWNING
