@@ -16,8 +16,6 @@ public class Projectile : Photon.MonoBehaviour {
 
 	public bool canStart = false;
 
-	private bool canDestroy = false;
-
 	private GameObject explosion;
 	
 	public void StartShot (Shoot shootScript) {

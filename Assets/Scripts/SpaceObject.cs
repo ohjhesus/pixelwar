@@ -14,6 +14,8 @@ public class SpaceObject : Photon.MonoBehaviour {
 	public float minSpeed = 10f;
 	public float maxSpeed = 50f;
 
+	public Texture2D source;
+
 	private Rigidbody2D rib;
 
 	// Sync SO health
@@ -23,11 +25,6 @@ public class SpaceObject : Photon.MonoBehaviour {
 		} else {
 			health = (int)stream.ReceiveNext();
 		}
-	}
-
-	// Use this for initialization
-	void Start () {
-		
 	}
 
 	void FinishedSetup () {
@@ -94,6 +91,7 @@ public class SpaceObject : Photon.MonoBehaviour {
 		if (transform.FindChild("Trail") != null) {
 			Destroy(transform.FindChild("Trail").gameObject, transform.FindChild("Trail").GetComponent<ParticleSystem>().main.startLifetime.constantMax);
 			transform.FindChild("Trail").SetParent(null);
+			SplitSprite();
 
 			if (PhotonNetwork.isMasterClient) {
 				PhotonNetwork.Destroy(gameObject);
@@ -126,8 +124,18 @@ public class SpaceObject : Photon.MonoBehaviour {
 		FinishedSetup();
 	}
 
-	[PunRPC]
-	void CreateExplosion () {
-
+	void SplitSprite() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				Sprite newSprite = Sprite.Create(source, new Rect(i * 128, j * 128, 128, 128), new Vector2(0.5f, 0.5f));
+				GameObject n = new GameObject();
+				SpriteRenderer sr = n.AddComponent<SpriteRenderer>();
+				sr.sortingLayerName = "Player";
+				sr.sortingOrder = 1;
+				sr.sprite = newSprite;
+				n.transform.localPosition = new Vector3(i * 2, j * 2, 0);
+				n.transform.parent = transform;
+			}
+		}
 	}
 }
