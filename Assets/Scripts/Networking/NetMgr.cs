@@ -66,7 +66,7 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void OnLevelLoaded (Scene scene, LoadSceneMode mode) {
 		if (scene.buildIndex == 1) {
-			SpawnPlayer();
+			StartCoroutine (SpawnPlayer());
 		}
 	}
 
@@ -114,8 +114,11 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	// PLAYER SPAWNING / RESPAWNING
 
-	private void SpawnPlayer () {
+	private IEnumerator SpawnPlayer () {
 		GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
+
+		while (player == null)
+			yield return new WaitForSeconds (0);
 
 		if (player.GetComponent<PhotonView>().isMine) {
 			localPlayer = player;
