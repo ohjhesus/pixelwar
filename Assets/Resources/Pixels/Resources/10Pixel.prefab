@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 11460604}
   - component: {fileID: 5006618}
   - component: {fileID: 114459477739714454}
-  - component: {fileID: 114795053268860792}
+  - component: {fileID: 114565806768314436}
   m_Layer: 10
   m_Name: 10Pixel
   m_TagString: Untagged
@@ -219,13 +219,13 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 114795053268860792}
+  - {fileID: 114565806768314436}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
---- !u!114 &114795053268860792
+--- !u!114 &114565806768314436
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

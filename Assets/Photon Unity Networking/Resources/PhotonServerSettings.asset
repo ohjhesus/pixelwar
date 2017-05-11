@@ -52,4 +52,7 @@ MonoBehaviour:
   - ConfigureAttachment
   - SetupShot
   - DestroySOWithTrail
+  - DestroySO
+  - DestroyPixelGO
+  - SpawnPixels
   DisableAutoOpenWizard: 1

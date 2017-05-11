@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PixelMoveTowards : MonoBehaviour {
+public class PixelMoveTowards : Photon.MonoBehaviour {
 
 //	int[] controllers;
 	private GameObject closestPlayer;
@@ -29,9 +29,7 @@ public class PixelMoveTowards : MonoBehaviour {
 			GameObject.FindGameObjectWithTag("GameManager").GetComponent<Builder>().pr.pixelsRemaining += pixelsToAdd;
 			GameObject.FindGameObjectWithTag("GameManager").GetComponent<Builder>().pr.UpdateCounter();
 
-			if (PhotonNetwork.isMasterClient) {
-				PhotonNetwork.Destroy(gameObject);
-			}
+			photonView.RPC("DestroyPixelGO", PhotonTargets.MasterClient);
 		}
 
 		transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotationAmount - ((4 - moveDistance) * rotationAmount * 5));
@@ -40,6 +38,11 @@ public class PixelMoveTowards : MonoBehaviour {
 			canCheckDistance = false;
 			CheckDistance ();
 		}
+	}
+
+	[PunRPC]
+	void DestroyPixelGO () {
+		PhotonNetwork.Destroy(gameObject);
 	}
 
 	void CheckDistance () {

@@ -7,15 +7,18 @@ public class SpaceObjectSpawner : Photon.MonoBehaviour {
 
 	public float minCooldown;
 	public float maxCooldown;
+	public float cooldownPerPlayerMultiplier = 1.0f;
 
 	private Vector3 spawnPos;
 	private bool canSpawn = false;
 
 	// Use this for initialization
 	void Start () {
-		spaceObjects = Resources.LoadAll("SpaceObjects/Resources");
-		canSpawn = false;
-		StartCoroutine (Cooldown ());
+		if (PhotonNetwork.isMasterClient) {
+			spaceObjects = Resources.LoadAll("SpaceObjects/Resources");
+			canSpawn = false;
+			StartCoroutine(Cooldown());
+		}
 	}
 
 	void Update () {
@@ -29,7 +32,7 @@ public class SpaceObjectSpawner : Photon.MonoBehaviour {
 	IEnumerator SpawnSO () {
 		int canSpawnCount = 0;
 		spawnPos = new Vector2(Random.Range (-50f, 50f), Random.Range (-50f, 50f));
-		while (canSpawnCount != GameObject.FindGameObjectsWithTag ("Player").Length) {
+		while (canSpawnCount != PhotonNetwork.playerList.Length) {
 			canSpawnCount = 0;
 			spawnPos = new Vector2(Random.Range (-50f, 50f), Random.Range (-50f, 50f));
 
@@ -42,7 +45,8 @@ public class SpaceObjectSpawner : Photon.MonoBehaviour {
 		}
 
 		int index = Random.Range (0, spaceObjects.Length);
-		GameObject spaceObject = (GameObject)PhotonNetwork.Instantiate (spaceObjects [index].name, spawnPos, Quaternion.identity, 0);
+		//GameObject spaceObject = (GameObject)PhotonNetwork.Instantiate (spaceObjects [index].name, spawnPos, Quaternion.identity, 0);
+		GameObject spaceObject = (GameObject)PhotonNetwork.InstantiateSceneObject(spaceObjects[index].name, spawnPos, Quaternion.identity, 0, null);
 		SpaceObject SOScript = spaceObject.GetComponent<SpaceObject>();
 
 		Vector2 direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
@@ -55,7 +59,7 @@ public class SpaceObjectSpawner : Photon.MonoBehaviour {
 	}
 
 	IEnumerator Cooldown () {
-		yield return new WaitForSeconds (Random.Range (minCooldown, maxCooldown));
+		yield return new WaitForSeconds (Random.Range (minCooldown, maxCooldown) / (cooldownPerPlayerMultiplier * PhotonNetwork.playerList.Length));
 //		yield return new WaitForSeconds (1);
 		canSpawn = true;
 	}

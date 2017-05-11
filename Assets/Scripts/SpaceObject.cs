@@ -18,12 +18,15 @@ public class SpaceObject : Photon.MonoBehaviour {
 
 	private Rigidbody2D rib;
 
+	private bool canDestroy = true;
+
 	// Sync SO health
 	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 		if (stream.isWriting) {
 			stream.SendNext(health);
 		} else {
 			health = (int)stream.ReceiveNext();
+			AffectHealth(0);
 		}
 	}
 
@@ -38,26 +41,31 @@ public class SpaceObject : Photon.MonoBehaviour {
 	void Update () {
 		/*transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotSpeed);
 		transform.position += new Vector3 (direction.x, direction.y, 0) * speed / 100;*/
-		if (transform.position.x > 120 || transform.position.x < -120 || transform.position.y > 120 || transform.position.y < -120) {
-			//magic number to destroy so's without drops
-			AffectHealth (-42069);
+		if (canDestroy) {
+			if (transform.position.x > 120 || transform.position.x < -120 || transform.position.y > 120 || transform.position.y < -120) {
+				canDestroy = false;
+
+				//magic number to destroy so's without drops
+				AffectHealth(-42069);
+			}
 		}
 	}
 
+	[PunRPC]
 	public void SpawnPixels (int amount) {
 //		Debug.Log (amount);
 		while (amount >= 10) {
-			GameObject pt = (GameObject)PhotonNetwork.Instantiate ("10Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0);
+			GameObject pt = (GameObject)PhotonNetwork.InstantiateSceneObject ("10Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0, null);
 			pt.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
 			amount -= 10;
 		}
 		while (amount >= 5) {
-			GameObject pf = (GameObject)PhotonNetwork.Instantiate ("5Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0);
+			GameObject pf = (GameObject)PhotonNetwork.InstantiateSceneObject ("5Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0, null);
 			pf.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
 			amount -= 5;
 		}
 		while (amount >= 1) {
-			GameObject po = (GameObject)PhotonNetwork.Instantiate ("1Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0);
+			GameObject po = (GameObject)PhotonNetwork.InstantiateSceneObject ("1Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0, null);
 			po.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
 			amount -= 1;
 		}
@@ -73,17 +81,20 @@ public class SpaceObject : Photon.MonoBehaviour {
 			explosion.transform.localScale = new Vector3 (size * 10, size * 10, 1);
 
 			if (amount != -42069) {
-				SpawnPixels (Mathf.FloorToInt (size * 10));
+				photonView.RPC("SpawnPixels", PhotonTargets.MasterClient, Mathf.FloorToInt (size * 10));
 			}
 			
 			if (transform.FindChild("Trail")) {
 				photonView.RPC("DestroySOWithTrail", PhotonTargets.AllBufferedViaServer);
 			} else {
-				if (PhotonNetwork.isMasterClient) {
-					PhotonNetwork.Destroy(gameObject);
-				}
+				photonView.RPC("DestroySO", PhotonTargets.MasterClient);
 			}
 		}
+	}
+
+	[PunRPC]
+	void DestroySO() {
+		PhotonNetwork.Destroy(gameObject);
 	}
 
 	[PunRPC]
@@ -93,9 +104,7 @@ public class SpaceObject : Photon.MonoBehaviour {
 			transform.FindChild("Trail").SetParent(null);
 			SplitSprite();
 
-			if (PhotonNetwork.isMasterClient) {
-				PhotonNetwork.Destroy(gameObject);
-			}
+			photonView.RPC("DestroySO", PhotonTargets.MasterClient);
 		}
 	}
 
@@ -118,7 +127,7 @@ public class SpaceObject : Photon.MonoBehaviour {
 		rotSpeed = tempRotSpeed;
 
 		//Log spaceObject stats
-		Debug.Log("spawning space object - size: " + size + "; health: " + health + "; speed: " + speed + "; torque: " + rotSpeed);
+		//Debug.Log("spawning space object - size: " + size + "; health: " + health + "; speed: " + speed + "; torque: " + rotSpeed);
 
 		//Begin movement
 		FinishedSetup();

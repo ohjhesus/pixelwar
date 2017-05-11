@@ -18,6 +18,8 @@ public class NetMgr : Photon.MonoBehaviour {
 	private bool hasJoinedLobby = false;
 
 	private void Start() {
+		PhotonNetwork.autoJoinLobby = true;
+
 		if (dontDestroyOnLoad) {
 			DontDestroyOnLoad(gameObject);
 		}
@@ -35,7 +37,9 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void ConnectOnline () {
 		Debug.Log ("NET: Joining Online");
-		PhotonNetwork.ConnectToBestCloudServer (gameVersion);
+		//PhotonNetwork.ConnectToBestCloudServer (gameVersion);
+		PhotonNetwork.ConnectUsingSettings(gameVersion);
+		PhotonNetwork.JoinLobby();
 	}
 
 	private void ConnectLAN (string address, int port) {
