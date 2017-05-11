@@ -7,7 +7,7 @@ public class PlayerCollisions : Photon.MonoBehaviour {
 		if (coll.gameObject.tag == "Projectile") {
 			coll.gameObject.GetComponent<Collider2D> ().enabled = false;
 
-			Debug.Log(name + Vector2.down * coll.gameObject.GetComponent<Projectile>().knockback);
+			Debug.Log(name + " hit!");
 			GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * coll.gameObject.GetComponent<Projectile>().knockback * 100f);
 
 			GetComponent<Player> ().AffectHealth (coll.gameObject.GetComponent<Projectile> ().damage);

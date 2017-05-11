@@ -22,7 +22,7 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 		currentColor.a = 1.0f;
 
 		GameObject[] spawns = GameObject.FindGameObjectsWithTag("PlayerSpawn");
-		Transform currentSpawnPoint = spawns[numberOfPlayers].transform;
+		Transform currentSpawnPoint = spawns[numberOfPlayers - 1].transform;
 
 		gameObject.name = currentName;
 		GetComponent<SpriteRenderer>().material.color = currentColor;
