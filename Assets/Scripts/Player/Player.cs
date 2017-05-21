@@ -92,40 +92,39 @@ public class Player : Photon.MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		if (!photonView.isMine) return;
+		if (!photonView.isMine) return; // exit FixedUpdate function if player isn't ours (multiplayer)
 
 		if (outOfArena) {
 			Vector2 direction = (-transform.position).normalized;
-			GetComponent<Rigidbody2D>().AddForce(direction * 7.5f);
+			GetComponent<Rigidbody2D>().AddForce(direction * 7.5f); // apply force towards centre of arena
 		}
 
-		if (!pauseMenu.activeInHierarchy && !builderMenu.activeInHierarchy) {
-			if (Input.GetKey("w")) {
-				rib.AddRelativeForce(new Vector2(0, totalSpeed));
+		if (!pauseMenu.activeInHierarchy && !builderMenu.activeInHierarchy) { // if not paused and not in player builder
+			if (Input.GetKey("w")) { // if "w" key pressed
+				rib.AddRelativeForce(new Vector2(0, totalSpeed)); // move forward at totalSpeed (base speed + any additional speed upgrades)
 				movingForwards = true;
 			} else {
 				movingForwards = false;
 			}
 
-			if (Input.GetKey("s")) {
-				rib.AddRelativeForce(new Vector2(0, (-totalSpeed / 4)));
+			if (Input.GetKey("s")) { // if "s" key pressed
+				rib.AddRelativeForce(new Vector2(0, (-totalSpeed / 4))); // move backward at totalSpeed / 4
 			}
 
-			if (Input.GetKey("a")) {
-				rib.AddTorque(totalTurnSpeed);
+			if (Input.GetKey("a")) { // if "a" key pressed
+				rib.AddTorque(totalTurnSpeed); // turn left at totalTurnSpeed
 			}
 
-			if (Input.GetKey("d")) {
-				rib.AddTorque(-totalTurnSpeed);
+			if (Input.GetKey("d")) { // if "d" key pressed
+				rib.AddTorque(-totalTurnSpeed); // turn right at totalTurnSpeed
 			}
 		} else {
 			movingForwards = false;
 		}
 	}
 
-	public void AffectHealth(int amount)
-    {
-        pixels += amount;
+	public void AffectHealth(int amount) {
+        pixels += amount; // adds amount to pixels, use negative value for damaging player
 
 		if (pixels <= 0) {
 			Debug.Log (name + " died!");

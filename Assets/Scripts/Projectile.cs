@@ -39,13 +39,13 @@ public class Projectile : Photon.MonoBehaviour {
 	}
 
 	public void Explode () {
-		photonView.RPC("CreateExplosion", PhotonTargets.AllViaServer);
+		photonView.RPC("CreateProjectileExplosion", PhotonTargets.All);
 
-		StartCoroutine(DestroyProjectile());
+		photonView.RPC ("MasterDestroyProjectile", PhotonTargets.MasterClient);
 	}
 
 	[PunRPC]
-	void CreateExplosion () {
+	void CreateProjectileExplosion () {
 		if (explosion != null) {
 			explosion.GetComponent<ProjectileExplosion>().enabled = true;
 			explosion.transform.SetParent(null);
@@ -56,6 +56,11 @@ public class Projectile : Photon.MonoBehaviour {
 
 			//canDestroy = true;
 		}
+	}
+
+	[PunRPC]
+	void MasterDestroyProjectile () {
+		StartCoroutine(DestroyProjectile());
 	}
 
 	IEnumerator DestroyProjectile () {

@@ -21,6 +21,7 @@ TagManager:
   - PlayerSpawn
   - NetMgr
   - GameManager
+  - OptionsSubmenu
   layers:
   - Default
   - TransparentFX

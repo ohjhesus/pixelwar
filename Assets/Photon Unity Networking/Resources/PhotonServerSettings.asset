@@ -55,4 +55,6 @@ MonoBehaviour:
   - DestroySO
   - DestroyPixelGO
   - SpawnPixels
+  - CreateProjectileExplosion
+  - MasterDestroyProjectile
   DisableAutoOpenWizard: 1

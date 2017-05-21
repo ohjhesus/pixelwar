@@ -120,8 +120,8 @@ public class Options : MonoBehaviour {
 	}
 
 	public void UpdateSettings () {
-		sfxVolume = PlayerPrefs.GetFloat ("sfxVolume", 0f);
-        musicVolume = PlayerPrefs.GetFloat("musicVolume", -12f);
+		sfxVolume = PlayerPrefs.GetFloat ("sfxVolume", 0.6f);
+		musicVolume = PlayerPrefs.GetFloat ("musicVolume", 0.6f);
         displayFPS = GetBool("displayFPS", false);
 		motionBlur = GetBool ("motionBlur", true);
 		bloom = GetBool ("bloom", true);
@@ -149,10 +149,39 @@ public class Options : MonoBehaviour {
         Camera.main.GetComponent<BloomOptimized>().enabled = bloom;
         Camera.main.GetComponent<VignetteAndChromaticAberration>().enabled = chromaticAberration;
 
-        mixer.SetFloat ("SFXMixVolume", sfxVolume);
-		mixer.SetFloat ("MusicMixVolume", musicVolume);
+		// music / sfx volume
+		float sfxDB = 0f;
+		float musicDB = 0f;
+		if (sfxVolume != 0) {
+			sfxDB = 20.0f * Mathf.Log10 (sfxVolume);
+		} else {
+			sfxDB = -144.0f;
+		}
+		if (musicVolume != 0) {
+			musicDB = 20.0f * Mathf.Log10 (musicVolume);
+		} else {
+			musicDB = -144.0f;
+		}
+		mixer.SetFloat ("SFXMixVolume", sfxDB);
+		mixer.SetFloat ("MusicMixVolume", musicDB);
 
 		fpsDisplay.SetActive (displayFPS);
+
+		UpdateOptionsUI ();
+	}
+
+	void UpdateOptionsUI () {
+		foreach (GameObject go in GameObject.FindGameObjectsWithTag("OptionsSubmenu")) {
+			foreach (Transform submenuChild in go.transform) {
+				if (submenuChild.GetComponent<Toggle> ()) {
+					submenuChild.GetComponent<Toggle> ().isOn = GetBool (submenuChild.GetComponent<UIInteractions> ().ppVar);
+				} else if (submenuChild.GetComponent<Slider> ()) {
+					submenuChild.GetComponent<Slider> ().value = PlayerPrefs.GetFloat (submenuChild.GetComponent<UIInteractions> ().ppVar);
+				} else {
+					Debug.Log ("Unsupported object tried to update: " + submenuChild.name);
+				}
+			}
+		}
 	}
 
 	private IEnumerator Fullscreen (bool fullscreen) {

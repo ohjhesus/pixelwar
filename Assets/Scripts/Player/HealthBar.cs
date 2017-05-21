@@ -8,6 +8,7 @@ public class HealthBar : MonoBehaviour {
 	private GameObject player;
 	private float health;
 	private Image img;
+	private Material mat;
 
 	private NetMgr netMgr;
 
@@ -16,6 +17,8 @@ public class HealthBar : MonoBehaviour {
 
 		player = netMgr.localPlayer;
 		img = GetComponent<Image> ();
+		mat = (Material)Instantiate (img.material);
+		img.material = mat;
 	}
 
 	// Update is called once per frame

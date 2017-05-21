@@ -130,7 +130,7 @@ MonoBehaviour:
   cooldown: 1.8
   projectile: {fileID: 127672, guid: e03a59c3fb4f84c4abd4b92bfe9ae243, type: 2}
   projectileSpeedMultiplier: 1.1
-  projectileTorque: 0.3
+  projectileTorque: 9
   projectileKnockback: 3
   projectileDamage: 5
   projectileTravelDistance: 200

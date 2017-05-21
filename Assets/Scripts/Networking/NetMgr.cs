@@ -47,6 +47,11 @@ public class NetMgr : Photon.MonoBehaviour {
 		PhotonNetwork.ConnectToMaster (address, port, appID, gameVersion);
 	}
 
+	public void Disconnect () {
+		PhotonNetwork.Disconnect ();
+		PhotonNetwork.LoadLevel (0);
+	}
+
 	private void OnPhotonPlayerConnected (PhotonPlayer connected) {
 		Debug.Log("NET: Player connected");
 	}
