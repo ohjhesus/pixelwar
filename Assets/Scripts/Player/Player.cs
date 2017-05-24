@@ -168,43 +168,43 @@ public class Player : Photon.MonoBehaviour {
 	}
 
 	public void Fire (int shootScriptIndex) {
-		if (!photonView.isMine) return;
+		if (!photonView.isMine) return; // exit Fire function if player isn't ours (multiplayer)
 
-		Shoot shootScript = shootScripts[shootScriptIndex];
+		Shoot shootScript = shootScripts[shootScriptIndex]; // get Shoot script of cannon that shot
 
-		GameObject shot = PhotonNetwork.Instantiate(shootScript.projectile.name, shootScript.transform.position + (shootScript.transform.up / 3), shootScript.transform.rotation, 0);
-		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+		GameObject shot = PhotonNetwork.Instantiate(shootScript.projectile.name, shootScript.transform.position + (shootScript.transform.up / 3), shootScript.transform.rotation, 0); // create projectile object
+		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>()); // ignore collision between projectile and our own ship (avoid shooting ourself)
 
-		photonView.RPC("SetupShot", PhotonTargets.AllBufferedViaServer, shot.GetPhotonView().viewID, shootScriptIndex);
+		photonView.RPC("SetupShot", PhotonTargets.AllBufferedViaServer, shot.GetPhotonView().viewID, shootScriptIndex); // setup shot for all players
 	}
 
 	[PunRPC]
 	void SetupShot (int shotViewID, int shootScriptIndex) {
-		GameObject shot = PhotonView.Find(shotViewID).gameObject;
-		Shoot shootScript = shootScripts[shootScriptIndex];
+		GameObject shot = PhotonView.Find(shotViewID).gameObject; // find projectile by its multiplayer object ID
+		Shoot shootScript = shootScripts[shootScriptIndex]; // get Shoot script of cannon that shot
 		
 		//Debug.Log(shootScript.gameObject.name);
 
-		shot.name = name + shootScript.projectile.name;
-		shot.tag = "Projectile";
-		shot.transform.rotation = shootScript.transform.rotation;
-		shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier;
-		shot.GetComponent<Projectile>().torque = shootScript.projectileTorque;
-		shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10;
-		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage;
-		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance;
+		shot.name = name + shootScript.projectile.name; // set projectile name
+		shot.tag = "Projectile"; // set projectile tag
+		shot.transform.rotation = shootScript.transform.rotation; // make projectile start facing correct direction
+		shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier; // speed = player speed + projectile speed
+		shot.GetComponent<Projectile>().torque = shootScript.projectileTorque; // allow projectile to rotate
+		shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10; // set knockback applied to objects collided with
+		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage; // set damage
+		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance; // set how far projectile can travel before it is destroyed
 
-		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>()); // ignore collision between projectile and our own ship
 		foreach (GameObject attachment in attachments) {
-			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), attachment.GetComponent<Collider2D>());
+			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), attachment.GetComponent<Collider2D>()); // ignore collision between projectile and our own attachments
 		}
 
 		GameObject[] otherProjectiles = GameObject.FindGameObjectsWithTag("Projectile");
 		foreach (GameObject go in otherProjectiles) {
-			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), go.GetComponent<Collider2D>());
+			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), go.GetComponent<Collider2D>()); // ignore collision with other projectiles
 		}
 
-		shot.GetComponent<Projectile>().StartShot(shootScript);
+		shot.GetComponent<Projectile>().StartShot(shootScript); // start projectile movement
 	}
 
 	public void FadeIn () {

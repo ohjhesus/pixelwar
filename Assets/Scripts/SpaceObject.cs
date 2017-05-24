@@ -54,20 +54,20 @@ public class SpaceObject : Photon.MonoBehaviour {
 	[PunRPC]
 	public void SpawnPixels (int amount) {
 //		Debug.Log (amount);
-		while (amount >= 10) {
+		while (amount >= 10) { // while amount of pixels to create is greater than or equal to 10
 			GameObject pt = (GameObject)PhotonNetwork.InstantiateSceneObject ("10Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0, null);
 			pt.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
-			amount -= 10;
+			amount -= 10; // create pixel object(s) with value of 10, apply random force to simulate explosion, subtract 10 from amount of pixels to create
 		}
-		while (amount >= 5) {
+		while (amount >= 5) { // while remaining amount of pixels to create is greater than or equal to 5
 			GameObject pf = (GameObject)PhotonNetwork.InstantiateSceneObject ("5Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0, null);
 			pf.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
-			amount -= 5;
+			amount -= 5; // create pixel object(s) with value of 5, apply random force to simulate explosion, subtract 5 from amount of pixels to create
 		}
-		while (amount >= 1) {
+		while (amount >= 1) { // while remaining amount of pixels to create is greater than or equal to 1
 			GameObject po = (GameObject)PhotonNetwork.InstantiateSceneObject ("1Pixel", new Vector3 (transform.position.x, transform.position.y, -1), transform.rotation, 0, null);
 			po.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (Random.Range (-1f, 1f) * 100f, Random.Range (-1f, 1f) * 100f));
-			amount -= 1;
+			amount -= 1; // create pixel object(s) with value of 1, apply random force to simulate explosion, subtract 1 from amount of pixels to create
 		}
 	}
 

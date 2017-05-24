@@ -12,26 +12,25 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 	public string currentName;
 
 	public void BeginSetup (int startingPixels) {
-		playerCount = PhotonNetwork.playerList.Length;
+//		playerCount = PhotonNetwork.playerList.Length;
 
 		// Detect spawned players
-		/*playersSpawned.Clear();
+		playersSpawned.Clear();
 		playersSpawned.AddRange(new bool[] {false, false, false, false});
-		int playerNumber = 0;
+		int playerNumber = 1;
 
-		if (PhotonNetwork.playerList.Length > 1) {
-			foreach (GameObject go in GameObject.FindGameObjectsWithTag ("Player")) {
-				Debug.Log (Regex.Match (go.name, @"\d+").Value);
-				int i = int.Parse (Regex.Match (go.name, @"\d+").Value);
+		foreach (GameObject go in GameObject.FindGameObjectsWithTag ("Player")) {
+			if (!go.GetPhotonView ().isMine) {
+				Debug.Log (Regex.Match (go.name, @"\d+$").Value);
+				int i = int.Parse (Regex.Match (go.name, @"\d+$").Value);
 				playersSpawned [i - 1] = true;
 			}
+		}
 
-			playerNumber = playersSpawned.IndexOf (false) + 1;
-		} else {
-			playerNumber = 1;
-		}*/
+		playerNumber = playersSpawned.IndexOf (false) + 1;
+//		Debug.Log (playersSpawned.IndexOf (false) + 1);
 
-		photonView.RPC("SetupPlayer", PhotonTargets.AllBufferedViaServer, playerCount, startingPixels);
+		photonView.RPC("SetupPlayer", PhotonTargets.AllBuffered, playerNumber, startingPixels);
 	}
 
 	[PunRPC]
