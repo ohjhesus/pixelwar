@@ -126,13 +126,15 @@ public class NetMgr : Photon.MonoBehaviour {
 	private IEnumerator SpawnPlayer () {
 		GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
 
-		if (player.GetComponent<PhotonView>().isMine) {
-			while (player == null)
-				yield return new WaitForSeconds (0);
+		while (player == null)
+			yield return new WaitForSeconds(0);
 
-			player.tag = "Player";
-			localPlayer = player;
-			player.GetComponent<PlayerSetupSync>().BeginSetup(startingPixels);
+		player.tag = "Player";
+		localPlayer = player;
+		player.GetComponent<PlayerSetupSync>().BeginSetup(startingPixels);
+
+		if (player.GetComponent<PhotonView>().isMine) {
+			
 		}
 	}
 
