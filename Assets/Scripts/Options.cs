@@ -122,8 +122,8 @@ public class Options : MonoBehaviour {
 	public void UpdateSettings () {
 		sfxVolume = PlayerPrefs.GetFloat ("sfxVolume", 0.6f);
 		musicVolume = PlayerPrefs.GetFloat ("musicVolume", 0.6f);
-        displayFPS = GetBool("displayFPS", false);
-		motionBlur = GetBool ("motionBlur", true);
+		displayFPS = GetBool("displayFPS", true);
+		motionBlur = GetBool ("motionBlur", false);
 		bloom = GetBool ("bloom", true);
 		chromaticAberration = GetBool ("ca", true);
         GetSS ();
@@ -177,6 +177,13 @@ public class Options : MonoBehaviour {
 					submenuChild.GetComponent<Toggle> ().isOn = GetBool (submenuChild.GetComponent<UIInteractions> ().ppVar);
 				} else if (submenuChild.GetComponent<Slider> ()) {
 					submenuChild.GetComponent<Slider> ().value = PlayerPrefs.GetFloat (submenuChild.GetComponent<UIInteractions> ().ppVar);
+				} else if (submenuChild.GetComponent<Dropdown> ()) {
+					if (submenuChild.GetComponent<UIInteractions> ().ppVar == "resolution") {
+//						submenuChild.GetComponent<Dropdown> ().value = PlayerPrefs.GetString (submenuChild.GetComponent<UIInteractions> ().ppVar);
+					} else {
+						submenuChild.GetComponent<Dropdown> ().value = PlayerPrefs.GetInt (submenuChild.GetComponent<UIInteractions> ().ppVar);
+					}
+					submenuChild.GetComponent<Dropdown> ().RefreshShownValue ();
 				} else {
 					Debug.Log ("Unsupported object tried to update: " + submenuChild.name);
 				}

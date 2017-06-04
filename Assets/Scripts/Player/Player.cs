@@ -12,6 +12,7 @@ public class Player : Photon.MonoBehaviour {
 	private Rigidbody2D rib;
 	private bool movingForwards;
 	public GameObject flame;
+	public GameObject flameTrail;
 	private float currentLerpTime;
 	public float lerpTime;
 
@@ -31,6 +32,8 @@ public class Player : Photon.MonoBehaviour {
 
 	public List<GameObject> attachments;
 
+	private NetOperations netOps;
+
 	// Sync player pixels
 	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 		if (stream.isWriting) {
@@ -48,6 +51,7 @@ public class Player : Photon.MonoBehaviour {
 			pauseMenu = GameObject.Find("GameManager").GetComponent<Pause>().pausePanel;
 			builderMenu = GameObject.Find("GameManager").GetComponent<Builder>().builderPanel;
 			options = GameObject.Find("GameManager").GetComponent<Options>();
+			netOps = GameObject.Find ("NetworkManager").GetComponent<NetOperations> ();
 		}
 
 		rib = GetComponent<Rigidbody2D> ();
@@ -61,12 +65,12 @@ public class Player : Photon.MonoBehaviour {
 
 	void Update () {
 		if (canFadeIn && movingForwards) {
-			FadeIn ();
+			photonView.RPC ("FadeIn", PhotonTargets.All);
 			canFadeIn = false;
 			canFadeOut = true;
 		}
 		if (canFadeOut && !movingForwards) {
-			FadeOut ();
+			photonView.RPC ("FadeOut", PhotonTargets.All);
 			canFadeOut = false;
 			canFadeIn = true;
 		}
@@ -79,7 +83,8 @@ public class Player : Photon.MonoBehaviour {
 				foreach (Shoot shootScript in shootScripts) {
 					if (shootScript.canShoot) {
 						shootScript.canShoot = false;
-						shootScript.gameObject.GetComponent<AudioSource>().PlayOneShot(shootScript.gameObject.GetComponent<AudioSource>().clip, shootScript.gameObject.GetComponent<AudioSource>().volume);
+//						shootScript.gameObject.GetComponent<AudioSource>().PlayOneShot(shootScript.gameObject.GetComponent<AudioSource>().clip, shootScript.gameObject.GetComponent<AudioSource>().volume);
+						netOps.gameObject.GetPhotonView().RPC("RPCPlayOneShot", PhotonTargets.All, photonView.viewID, shootScript.gameObject.name, "Cannon Shots/", shootScript.gameObject.GetComponent<AudioSource>().clip.name, shootScript.gameObject.GetComponent<AudioSource>().volume);
 						if (options.chromaticAberration) {
 							StartCoroutine(shootScript.FadeAberration());
 						}
@@ -207,8 +212,10 @@ public class Player : Photon.MonoBehaviour {
 		shot.GetComponent<Projectile>().StartShot(shootScript); // start projectile movement
 	}
 
+	[PunRPC]
 	public void FadeIn () {
 		flame.SetActive(true);
+		flameTrail.GetComponent<ParticleSystem> ().Play ();
 		flame.GetComponent <SpriteRenderer>().enabled = true;
 		flame.transform.FindChild ("Light").gameObject.GetComponent<Light> ().range = 10f;
 		/*currentLerpTime = Time.deltaTime;
@@ -219,8 +226,10 @@ public class Player : Photon.MonoBehaviour {
 		}*/
 	}
 
+	[PunRPC]
 	public void FadeOut () {
 		flame.transform.FindChild("Light").gameObject.GetComponent<Light> ().range = 2.3f;
+		flameTrail.GetComponent<ParticleSystem> ().Stop ();
 		flame.SetActive(false);
 	}
 }

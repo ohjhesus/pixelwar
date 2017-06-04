@@ -15597,9 +15597,9 @@ GameObject:
   - component: {fileID: 1739602830}
   - component: {fileID: 1739602834}
   - component: {fileID: 1739602836}
-  - component: {fileID: 1739602829}
   - component: {fileID: 1739602837}
   - component: {fileID: 1739602835}
+  - component: {fileID: 1739602829}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -15630,7 +15630,7 @@ MonoBehaviour:
   velocityDownsample: 1
   excludeLayers:
     serializedVersion: 2
-    m_Bits: 544
+    m_Bits: 2080
   shader: {fileID: 4800000, guid: 85a88efa8c871af4a9d17c64791b6f4f, type: 3}
   dx11MotionBlurShader: {fileID: 4800000, guid: f1b13d7a80660504a858ea24cfa418c6,
     type: 3}

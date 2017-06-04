@@ -57,4 +57,10 @@ MonoBehaviour:
   - SpawnPixels
   - CreateProjectileExplosion
   - MasterDestroyProjectile
+  - RPCPlay
+  - RPCPlayOneShot
+  - RPCSetLightIntensity
+  - RPCStop
+  - FadeIn
+  - FadeOut
   DisableAutoOpenWizard: 1
