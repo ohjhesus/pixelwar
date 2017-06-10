@@ -12,6 +12,7 @@ public class Shoot : MonoBehaviour {
 	public float projectileKnockback;
 	public int projectileDamage;
 	public float projectileTravelDistance;
+	public float aimCone;
 
 	public float aberration;
 	public float lerpTime;

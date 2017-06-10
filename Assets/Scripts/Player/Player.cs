@@ -28,7 +28,7 @@ public class Player : Photon.MonoBehaviour {
 	private GameObject pauseMenu;
 	private GameObject builderMenu;
 
-	public bool outOfArena;
+	[HideInInspector] public bool outOfArena;
 
 	public List<GameObject> attachments;
 
@@ -180,6 +180,15 @@ public class Player : Photon.MonoBehaviour {
 		GameObject shot = PhotonNetwork.Instantiate(shootScript.projectile.name, shootScript.transform.position + (shootScript.transform.up / 3), shootScript.transform.rotation, 0); // create projectile object
 		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>()); // ignore collision between projectile and our own ship (avoid shooting ourself)
 
+		shot.transform.rotation = Quaternion.Euler (shootScript.transform.rotation.eulerAngles * Random.Range(-shootScript.aimCone, shootScript.aimCone)); // make projectile start facing correct direction
+		shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier; // speed = player speed + projectile speed
+		shot.GetComponent<Projectile>().torque = shootScript.projectileTorque; // allow projectile to rotate
+		shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10; // set knockback applied to objects collided with
+		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage; // set damage
+		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance; // set how far projectile can travel before it is destroyed
+
+		shot.GetComponent<Projectile>().StartShot(shootScript); // start projectile movement
+
 		photonView.RPC("SetupShot", PhotonTargets.AllBufferedViaServer, shot.GetPhotonView().viewID, shootScriptIndex); // setup shot for all players
 	}
 
@@ -192,12 +201,6 @@ public class Player : Photon.MonoBehaviour {
 
 		shot.name = name + shootScript.projectile.name; // set projectile name
 		shot.tag = "Projectile"; // set projectile tag
-		shot.transform.rotation = shootScript.transform.rotation; // make projectile start facing correct direction
-		shot.GetComponent<Projectile>().speed = ((totalSpeed / rib.drag) - Time.fixedDeltaTime * totalSpeed) / rib.mass * shootScript.projectileSpeedMultiplier; // speed = player speed + projectile speed
-		shot.GetComponent<Projectile>().torque = shootScript.projectileTorque; // allow projectile to rotate
-		shot.GetComponent<Projectile>().knockback = shootScript.projectileKnockback / 10; // set knockback applied to objects collided with
-		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage; // set damage
-		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance; // set how far projectile can travel before it is destroyed
 
 		Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), GetComponent<Collider2D>()); // ignore collision between projectile and our own ship
 		foreach (GameObject attachment in attachments) {
@@ -208,8 +211,6 @@ public class Player : Photon.MonoBehaviour {
 		foreach (GameObject go in otherProjectiles) {
 			Physics2D.IgnoreCollision(shot.GetComponent<Collider2D>(), go.GetComponent<Collider2D>()); // ignore collision with other projectiles
 		}
-
-		shot.GetComponent<Projectile>().StartShot(shootScript); // start projectile movement
 	}
 
 	[PunRPC]
