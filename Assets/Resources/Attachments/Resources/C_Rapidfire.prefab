@@ -127,16 +127,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fecc5f3afbdfe42f8a04ad3b5a39488d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.06
-  projectile: {fileID: 127672, guid: e03a59c3fb4f84c4abd4b92bfe9ae243, type: 2}
+  cooldown: 0.2
+  projectile: {fileID: 127672, guid: 61211b68330c94488b83c7adc7b9bf14, type: 2}
   projectileSpeedMultiplier: 1.8
   projectileTorque: 0
   projectileKnockback: 1
   projectileDamage: 1
   projectileTravelDistance: 200
-  aimCone: 3
+  aimCone: 4
   aberration: 7
-  lerpTime: 0.2
+  lerpTime: 0.25
   canShoot: 0
 --- !u!114 &11450694
 MonoBehaviour:
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a17e3edae304fe9bc143ab43651cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 45
+  price: 60
   target: {fileID: 0}
   localPos: {x: 0, y: 0, z: 0}
   original: {fileID: 0}
