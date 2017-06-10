@@ -13,11 +13,15 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	public bool dontDestroyOnLoad = true;
 	public int startingPixels = 60;
-	public GameObject localPlayer;
+	[HideInInspector] public GameObject localPlayer;
 
 	private bool hasJoinedLobby = false;
 
+	public GameObject loadingPanel;
+
 	private void Start() {
+		loadingPanel.SetActive(false);
+
 		PhotonNetwork.autoJoinLobby = true;
 
 		if (dontDestroyOnLoad) {
@@ -37,6 +41,7 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void ConnectOnline () {
 		Debug.Log ("NET: Joining Online");
+
 		//PhotonNetwork.ConnectToBestCloudServer (gameVersion);
 		PhotonNetwork.ConnectUsingSettings(gameVersion);
 		PhotonNetwork.JoinLobby();
@@ -44,6 +49,7 @@ public class NetMgr : Photon.MonoBehaviour {
 
 	private void ConnectLAN (string address, int port) {
 		Debug.Log ("NET: Joining LAN - " + address + ":" + port);
+
 		PhotonNetwork.ConnectToMaster (address, port, appID, gameVersion);
 	}
 
@@ -98,18 +104,26 @@ public class NetMgr : Photon.MonoBehaviour {
 	// BUTTON HANDLERS
 
 	public void StartOnlineMultiplayer () {
+		loadingPanel.SetActive(true);
+
 		ConnectOnline ();
 	}
 
 	public void StartLANMultiplayer (string address, int port) {
 		Debug.Log("start lan");
+
+		loadingPanel.SetActive(true);
+
 		serverIP = address;
 		serverPort = port;
 		ConnectLAN (address, port);
 	}
 
 	public void StartOffline () {
+		loadingPanel.SetActive(true);
+
 		PhotonNetwork.offlineMode = true;
+
 		OnJoinedLobby ();
 	}
 
@@ -131,11 +145,9 @@ public class NetMgr : Photon.MonoBehaviour {
 
 		player.tag = "Player";
 		localPlayer = player;
-		player.GetComponent<PlayerSetupSync>().BeginSetup(startingPixels);
 
-		if (player.GetComponent<PhotonView>().isMine) {
-			
-		}
+		yield return new WaitForSeconds(1f);
+		player.GetComponent<PlayerSetupSync>().BeginSetup(startingPixels);
 	}
 
 	private void Respawn() {

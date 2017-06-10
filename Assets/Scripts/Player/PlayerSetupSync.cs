@@ -37,6 +37,8 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 		//Debug.Log(playersSpawned.IndexOf(false) + 1);
 
 		photonView.RPC("SetupPlayer", PhotonTargets.AllBuffered, playerNumber, startingPixels);
+
+		GameObject.Find("LoadingPanel").SetActive(false);
 	}
 
 	[PunRPC]
