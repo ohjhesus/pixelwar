@@ -12,12 +12,15 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 	public string currentName;
 
 	public void BeginSetup (int startingPixels) {
-//		playerCount = PhotonNetwork.playerList.Length;
+		playerCount = PhotonNetwork.playerList.Length;
+		Debug.Log ("Player count: " + PhotonNetwork.playerList.Length);
 
 		// Detect spawned players
 		playersSpawned.Clear();
 		playersSpawned.AddRange(new bool[] {false, false, false, false});
 		int playerNumber = 1;
+
+		Debug.Log(GameObject.FindGameObjectsWithTag("Player").Length);
 
 		foreach (GameObject go in GameObject.FindGameObjectsWithTag ("Player")) {
 			if (!go.GetPhotonView ().isMine) {
@@ -27,10 +30,15 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 			}
 		}
 
+		playersSpawned.ForEach(item => Debug.Log(item));
+
 		playerNumber = playersSpawned.IndexOf (false) + 1;
-//		Debug.Log (playersSpawned.IndexOf (false) + 1);
+		playersSpawned[playerNumber - 1] = true;
+		//Debug.Log(playersSpawned.IndexOf(false) + 1);
 
 		photonView.RPC("SetupPlayer", PhotonTargets.AllBuffered, playerNumber, startingPixels);
+
+		GameObject.Find("LoadingPanel").SetActive(false);
 	}
 
 	[PunRPC]
@@ -44,6 +52,7 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 		Transform currentSpawnPoint = spawns[playerNumber - 1].transform;
 
 		gameObject.name = currentName;
+		gameObject.tag = "Player";
 		GetComponent<SpriteRenderer>().material.color = currentColor;
 
 		GetComponent<Player>().pixels = startingPixels;
