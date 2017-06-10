@@ -2240,7 +2240,7 @@ ParticleSystem:
     enabled: 1
     x:
       minMaxState: 2
-      scalar: 0.2
+      scalar: 0.4
       maxCurve:
         serializedVersion: 2
         m_Curve:
