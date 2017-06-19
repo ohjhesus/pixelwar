@@ -131,7 +131,7 @@ MonoBehaviour:
   projectile: {fileID: 127672, guid: 61211b68330c94488b83c7adc7b9bf14, type: 2}
   projectileSpeedMultiplier: 1.8
   projectileTorque: 0
-  projectileKnockback: 1
+  projectileKnockback: 0.5
   projectileDamage: 1
   projectileTravelDistance: 200
   aimCone: 4

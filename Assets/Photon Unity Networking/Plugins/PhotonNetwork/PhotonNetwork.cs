@@ -1124,7 +1124,7 @@ public static class PhotonNetwork
         // Set up the NetworkingPeer and use protocol of PhotonServerSettings
         ConnectionProtocol protocol = PhotonNetwork.PhotonServerSettings.Protocol;
         networkingPeer = new NetworkingPeer(string.Empty, protocol);
-        networkingPeer.QuickResendAttempts = 2;
+        networkingPeer.QuickResendAttempts = 3;
         networkingPeer.SentCountAllowance = 7;
 
 

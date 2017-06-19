@@ -29,6 +29,14 @@ public class SpaceObjectSpawner : Photon.MonoBehaviour {
 		}
 	}
 
+	void OnMasterClientSwitched(PhotonPlayer newMasterClient) {
+		Restart();
+	}
+
+	public void Restart () {
+		Start();
+	}
+
 	IEnumerator SpawnSO () {
 		int canSpawnCount = 0;
 		spawnPos = new Vector2(Random.Range (-50f, 50f), Random.Range (-50f, 50f));
