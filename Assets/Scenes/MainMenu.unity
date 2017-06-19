@@ -315,6 +315,8 @@ GameObject:
   - component: {fileID: 216375083}
   - component: {fileID: 216375085}
   - component: {fileID: 216375086}
+  - component: {fileID: 216375087}
+  - component: {fileID: 216375088}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: NetMgr
@@ -392,6 +394,40 @@ MonoBehaviour:
   instantiationId: 1
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &216375087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 216375082}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d06466c03d263624786afa88b52928b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsWindowOn: 1
+  statsOn: 1
+  healthStatsVisible: 1
+  trafficStatsOn: 1
+  buttonsOn: 0
+  statsRect:
+    serializedVersion: 2
+    x: 0
+    y: 100
+    width: 200
+    height: 50
+  WindowId: 100
+--- !u!114 &216375088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 216375082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5edfd98215f97034db7469a9644973f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &252863457
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,7 +1598,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1606951461
 RectTransform:
   m_ObjectHideFlags: 0

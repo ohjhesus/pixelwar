@@ -23,6 +23,7 @@ public class NetMgr : Photon.MonoBehaviour {
 		loadingPanel.SetActive(false);
 
 		PhotonNetwork.autoJoinLobby = true;
+		PhotonNetwork.MaxResendsBeforeDisconnect = 15;
 
 		if (dontDestroyOnLoad) {
 			DontDestroyOnLoad(gameObject);

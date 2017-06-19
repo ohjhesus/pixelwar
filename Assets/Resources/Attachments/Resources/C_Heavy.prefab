@@ -134,6 +134,7 @@ MonoBehaviour:
   projectileKnockback: 3
   projectileDamage: 5
   projectileTravelDistance: 200
+  aimCone: 0
   aberration: 15
   lerpTime: 1.5
   canShoot: 0
