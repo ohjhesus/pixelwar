@@ -81,7 +81,7 @@ public class SpaceObject : Photon.MonoBehaviour {
 			explosion.transform.localScale = new Vector3 (size * 10, size * 10, 1);
 
 			if (amount != -42069) {
-				photonView.RPC("SpawnPixels", PhotonTargets.MasterClient, Mathf.FloorToInt (size * 10));
+				photonView.RPC("SpawnPixels", PhotonTargets.MasterClient, Mathf.FloorToInt (size * 25));
 			}
 			
 			if (transform.FindChild("Trail")) {

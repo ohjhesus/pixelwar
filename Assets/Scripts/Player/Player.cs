@@ -141,6 +141,9 @@ public class Player : Photon.MonoBehaviour {
 		//GameObject attachment = (GameObject)Instantiate (loadedAttachment, transform.position, transform.rotation);
 		GameObject attachment = PhotonNetwork.Instantiate(bAName, transform.position, transform.rotation, 0);
 
+		attachmentCount++;
+		attachments.Add(attachment);
+
 		photonView.RPC("ConfigureAttachment", PhotonTargets.AllBufferedViaServer, attachment.GetPhotonView().viewID, posX, posY);
 	}
 
@@ -158,7 +161,6 @@ public class Player : Photon.MonoBehaviour {
 			attachment.GetComponent<SpriteRenderer>().material.color = GetComponent<SpriteRenderer>().material.color;
 		}
 		attachment.name = name + tempName + attachmentCount;
-		attachmentCount++;
 
 		Physics2D.IgnoreCollision(attachment.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 		foreach (Transform child in transform) {
