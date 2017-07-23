@@ -11,7 +11,7 @@ public class PriceTag : MonoBehaviour {
 	
 	public void LoadPrice () {
 		GameObject tempPart;
-		tempPart = (GameObject)transform.parent.FindChild("Image").GetComponent<BuilderTile>().attachment;
+		tempPart = (GameObject)transform.parent.Find("Image").GetComponent<BuilderTile>().attachment;
 		GetComponent<Text>().text = tempPart.GetComponent<AttachToPlayer>().price + "px";
 	}
 

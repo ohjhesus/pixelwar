@@ -61,9 +61,9 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 		transform.rotation = currentSpawnPoint.rotation;
 
 		if (!photonView.isMine) {
-			transform.FindChild("HealthBar").gameObject.SetActive(true);
-			transform.FindChild("PlayerName").gameObject.SetActive(true);
-			transform.FindChild("ClosestSO").gameObject.SetActive(false);
+			transform.Find("HealthBar").gameObject.SetActive(true);
+			transform.Find("PlayerName").gameObject.SetActive(true);
+			transform.Find("ClosestSO").gameObject.SetActive(false);
 		}
 	}
 }

@@ -10,7 +10,7 @@ public class NetOperations : MonoBehaviour {
 		if (childName == "") {
 			PhotonView.Find (targetAudioSourceID).GetComponent<AudioSource> ().PlayOneShot ((AudioClip)Resources.Load (path + clipName), volume);
 		} else {
-			PhotonView.Find (targetAudioSourceID).transform.FindChild(childName).GetComponent<AudioSource> ().PlayOneShot ((AudioClip)Resources.Load (path + clipName), volume);
+			PhotonView.Find (targetAudioSourceID).transform.Find(childName).GetComponent<AudioSource> ().PlayOneShot ((AudioClip)Resources.Load (path + clipName), volume);
 		}
 	}
 
@@ -19,7 +19,7 @@ public class NetOperations : MonoBehaviour {
 		if (childName == "") {
 			PhotonView.Find (targetAudioSourceID).GetComponent<AudioSource> ().Play ();
 		} else {
-			PhotonView.Find (targetAudioSourceID).transform.FindChild(childName).GetComponent<AudioSource> ().Play ();
+			PhotonView.Find (targetAudioSourceID).transform.Find(childName).GetComponent<AudioSource> ().Play ();
 		}
 	}
 
@@ -28,7 +28,7 @@ public class NetOperations : MonoBehaviour {
 		if (childName == "") {
 			PhotonView.Find (targetAudioSourceID).GetComponent<AudioSource> ().Stop ();
 		} else {
-			PhotonView.Find (targetAudioSourceID).transform.FindChild(childName).GetComponent<AudioSource> ().Stop ();
+			PhotonView.Find (targetAudioSourceID).transform.Find(childName).GetComponent<AudioSource> ().Stop ();
 		}
 	}
 
@@ -39,7 +39,7 @@ public class NetOperations : MonoBehaviour {
 		if (childName == "") {
 			PhotonView.Find (targetAudioSourceID).GetComponent<Light> ().intensity = intensity;
 		} else {
-			PhotonView.Find (targetAudioSourceID).transform.FindChild(childName).GetComponent<Light> ().intensity = intensity;
+			PhotonView.Find (targetAudioSourceID).transform.Find(childName).GetComponent<Light> ().intensity = intensity;
 		}
 	}
 }

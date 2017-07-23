@@ -42,7 +42,9 @@ public class BuilderTile : MonoBehaviour {
 		canGetClosestAnchor = false;
 		anchors.Clear ();
 		foreach (GameObject go in GameObject.FindGameObjectsWithTag ("Anchor")) {
-			anchors.Add (go);
+			if (go.GetComponent<SpriteRenderer> ().enabled == true) {
+				anchors.Add (go);
+			}
 		}
 		canGetClosestAnchor = true;
 	}
@@ -126,6 +128,9 @@ public class BuilderTile : MonoBehaviour {
 						}
 
 						closestAnchor.GetComponent<SpriteRenderer> ().enabled = false;
+						if (closestAnchor.GetComponent<Anchor> ()) {
+							closestAnchor.GetComponent<Anchor> ().showAnchor = false;
+						}
 
 						pr.pixelsRemaining -= part.GetComponent<AttachToPlayer> ().price;
 						pr.UpdateCounter ();
