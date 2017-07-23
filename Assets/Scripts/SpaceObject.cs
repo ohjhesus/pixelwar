@@ -84,7 +84,7 @@ public class SpaceObject : Photon.MonoBehaviour {
 				photonView.RPC("SpawnPixels", PhotonTargets.MasterClient, Mathf.FloorToInt (size * 25));
 			}
 			
-			if (transform.FindChild("Trail")) {
+			if (transform.Find("Trail")) {
 				photonView.RPC("DestroySOWithTrail", PhotonTargets.AllBufferedViaServer);
 			} else {
 				photonView.RPC("DestroySO", PhotonTargets.MasterClient);
@@ -99,9 +99,9 @@ public class SpaceObject : Photon.MonoBehaviour {
 
 	[PunRPC]
 	void DestroySOWithTrail () {
-		if (transform.FindChild("Trail") != null) {
-			Destroy(transform.FindChild("Trail").gameObject, transform.FindChild("Trail").GetComponent<ParticleSystem>().main.startLifetime.constantMax);
-			transform.FindChild("Trail").SetParent(null);
+		if (transform.Find("Trail") != null) {
+			Destroy(transform.Find("Trail").gameObject, transform.Find("Trail").GetComponent<ParticleSystem>().main.startLifetime.constantMax);
+			transform.Find("Trail").SetParent(null);
 			SplitSprite();
 
 			photonView.RPC("DestroySO", PhotonTargets.MasterClient);

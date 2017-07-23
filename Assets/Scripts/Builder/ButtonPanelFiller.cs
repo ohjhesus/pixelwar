@@ -43,10 +43,10 @@ public class ButtonPanelFiller : MonoBehaviour {
 			GameObject tile = (GameObject)Instantiate(Resources.Load("Attachments/BuilderTile"));
 			tile.transform.SetParent(transform);
 			tile.transform.localScale = Vector3.one;
-			tile.transform.FindChild("Image").GetComponent<Image>().sprite = go.GetComponent<SpriteRenderer>().sprite;
-			tile.transform.FindChild("Image").GetComponent<BuilderTile>().attachment = go;
-			tile.transform.FindChild("Image").GetComponent<BuilderTile>().pr = GameObject.Find("PixelsRemaining").GetComponent<PixelsRemaining>();
-			tile.transform.FindChild("Price").GetComponent<PriceTag>().LoadPrice();
+			tile.transform.Find("Image").GetComponent<Image>().sprite = go.GetComponent<SpriteRenderer>().sprite;
+			tile.transform.Find("Image").GetComponent<BuilderTile>().attachment = go;
+			tile.transform.Find("Image").GetComponent<BuilderTile>().pr = GameObject.Find("PixelsRemaining").GetComponent<PixelsRemaining>();
+			tile.transform.Find("Price").GetComponent<PriceTag>().LoadPrice();
 			tile.name = go.name + "Tile";
 		}
 	}

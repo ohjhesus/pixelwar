@@ -239,7 +239,11 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
     public bool IsUsingNameServer { get; protected internal set; }
 
     /// <summary>Name Server Host Name for Photon Cloud. Without port and without any prefix.</summary>
+    #if !UNITY_EDITOR && UNITY_SWITCH
+    public const string NameServerHost = "nameserver-eu.cloudapp.net";//set to "ns.exitgames.com" after Nintendo has fixed the traffic manager bug in their dns-resolver for which this is a workaround
+    #else
     public const string NameServerHost = "ns.exitgames.com";
+    #endif
 
     /// <summary>Name Server for HTTP connections to the Photon Cloud. Includes prefix and port.</summary>
     public const string NameServerHttp = "http://ns.exitgamescloud.com:80/photon/n";
@@ -748,7 +752,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             #if !UNITY_EDITOR && (UNITY_PS3 || UNITY_ANDROID)
             this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketUdpNativeDynamic);
             PhotonHandler.PingImplementation = typeof(PingNativeDynamic);
-            #elif !UNITY_EDITOR && UNITY_IPHONE
+            #elif !UNITY_EDITOR && (UNITY_IPHONE || UNITY_SWITCH)
             this.SocketImplementationConfig[ConnectionProtocol.Udp] = typeof(SocketUdpNativeStatic);
             PhotonHandler.PingImplementation = typeof(PingNativeStatic);
             #elif !UNITY_EDITOR && UNITY_WINRT
@@ -2097,16 +2101,20 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 {
                     if (this.AuthValues != null)
                     {
-                        this.AuthValues.Token = null;  // invalidate any custom auth secrets
+                        this.AuthValues.Token = null;       // invalidate any custom auth secrets
                     }
 
-                    this.State = ClientState.PeerCreated; // if we set another state here, we could keep clients from connecting in OnDisconnectedFromPhoton right here.
+                    this.IsInitialConnect = false;          // not "connecting" anymore
+                    this.State = ClientState.PeerCreated;   // if we set another state here, we could keep clients from connecting in OnDisconnectedFromPhoton right here.
                     SendMonoMessage(PhotonNetworkingMessage.OnDisconnectedFromPhoton);
                 }
                 break;
 
             case StatusCode.ExceptionOnConnect:
             case StatusCode.SecurityExceptionOnConnect:
+
+				this.IsInitialConnect = false;
+
                 this.State = ClientState.PeerCreated;
                 if (this.AuthValues != null)
                 {
@@ -2132,6 +2140,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
                     this.State = ClientState.PeerCreated;
                     cause = (DisconnectCause)statusCode;
+					this.IsInitialConnect = false;
                     SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, cause);
                 }
                 else
@@ -2150,6 +2159,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 {
                     Debug.LogWarning(statusCode + " while connecting to: " + this.ServerAddress + ". Check if the server is available.");
 
+					this.IsInitialConnect = false;
                     cause = (DisconnectCause)statusCode;
                     SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, cause);
                 }
@@ -2185,6 +2195,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 {
                     Debug.LogWarning(statusCode + " while connecting to: " + this.ServerAddress + ". Check if the server is available.");
 
+					this.IsInitialConnect = false;
                     cause = (DisconnectCause)statusCode;
                     SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, cause);
                 }
@@ -2205,17 +2216,17 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 // this.mListener.clientErrorReturn(statusCode);
                 break;
 
-            case StatusCode.QueueOutgoingReliableWarning:
-            case StatusCode.QueueOutgoingUnreliableWarning:
-            case StatusCode.QueueOutgoingAcksWarning:
-            case StatusCode.QueueSentWarning:
-                // this.mListener.warningReturn(statusCode);
-                break;
+            //case StatusCode.QueueOutgoingReliableWarning:
+            //case StatusCode.QueueOutgoingUnreliableWarning:
+            //case StatusCode.QueueOutgoingAcksWarning:
+            //case StatusCode.QueueSentWarning:
+            //    // this.mListener.warningReturn(statusCode);
+            //    break;
 
-            case StatusCode.QueueIncomingReliableWarning:
-            case StatusCode.QueueIncomingUnreliableWarning:
-                Debug.Log(statusCode + ". This client buffers many incoming messages. This is OK temporarily. With lots of these warnings, check if you send too much or execute messages too slow. " + (PhotonNetwork.isMessageQueueRunning? "":"Your isMessageQueueRunning is false. This can cause the issue temporarily.") );
-                break;
+            //case StatusCode.QueueIncomingReliableWarning:
+            //case StatusCode.QueueIncomingUnreliableWarning:
+            //    Debug.Log(statusCode + ". This client buffers many incoming messages. This is OK temporarily. With lots of these warnings, check if you send too much or execute messages too slow. " + (PhotonNetwork.isMessageQueueRunning? "":"Your isMessageQueueRunning is false. This can cause the issue temporarily.") );
+            //    break;
 
                 // // TCP "routing" is an option of Photon that's not currently needed (or supported) by PUN
                 //case StatusCode.TcpRouterResponseOk:
@@ -2985,7 +2996,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         return true;
     }
 
-    internal Hashtable SendInstantiate(string prefabName, Vector3 position, Quaternion rotation, int group, int[] viewIDs, object[] data, bool isGlobalObject)
+    internal Hashtable SendInstantiate(string prefabName, Vector3 position, Quaternion rotation, byte group, int[] viewIDs, object[] data, bool isGlobalObject)
     {
         // first viewID is now also the gameobject's instantiateId
         int instantiateId = viewIDs[0];   // LIMITS PHOTONVIEWS&PLAYERS
@@ -3889,6 +3900,9 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
     /// </remarks>
     public static int ObjectsInOneUpdate = 10;
 
+	// cache the RaiseEventOptions to prevent redundant Memory Allocation
+	RaiseEventOptions options = new RaiseEventOptions();
+
     // this is called by Update() and in Unity that means it's single threaded.
     public void RunViewUpdate()
     {
@@ -3921,12 +3935,13 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
 
         // we got updates to send. every group is send it's own message and unreliable and reliable are split as well
-        RaiseEventOptions options = new RaiseEventOptions();
+		options.InterestGroup = 0;
+
         #if PHOTON_DEVELOP
         options.Receivers = ReceiverGroup.All;
         #endif
 
-        var enumerator = this.photonViewList.GetEnumerator();   // replacing foreach foreach (PhotonView view in this.photonViewList.Values)
+		var enumerator = this.photonViewList.GetEnumerator();   // replacing foreach (PhotonView view in this.photonViewList.Values) for memory allocation improvement
         while (enumerator.MoveNext())
         {
             PhotonView view = enumerator.Current.Value;

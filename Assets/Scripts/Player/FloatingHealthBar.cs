@@ -9,7 +9,7 @@ public class FloatingHealthBar : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		rend = transform.FindChild ("HealthBar").GetComponent<SpriteRenderer> ();
+		rend = transform.Find ("HealthBar").GetComponent<SpriteRenderer> ();
 		canUpdate = true;
 	}
 	

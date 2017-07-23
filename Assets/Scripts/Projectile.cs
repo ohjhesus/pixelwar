@@ -21,7 +21,7 @@ public class Projectile : Photon.MonoBehaviour {
 	public void StartShot (Shoot shootScript, Vector2 playerVelocity) {
 		transform.rotation.eulerAngles.Set(0, 0, shootScript.transform.eulerAngles.z);
 
-		explosion = transform.FindChild("Explosion").gameObject;
+		explosion = transform.Find("Explosion").gameObject;
 
 		rib = GetComponent<Rigidbody2D> ();
 		rib.velocity = new Vector3 (playerVelocity.x, playerVelocity.y, 0) + (transform.TransformDirection(new Vector3(0, speed, 0)));

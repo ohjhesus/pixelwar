@@ -45,8 +45,8 @@ public class Player : Photon.MonoBehaviour {
 
 	void Start () {
 		if (photonView.isMine) {
-			transform.FindChild("HealthBar").gameObject.SetActive(false);
-			transform.FindChild("PlayerName").gameObject.SetActive(false);
+			transform.Find("HealthBar").gameObject.SetActive(false);
+			transform.Find("PlayerName").gameObject.SetActive(false);
 
 			pauseMenu = GameObject.Find("GameManager").GetComponent<Pause>().pausePanel;
 			builderMenu = GameObject.Find("GameManager").GetComponent<Builder>().builderPanel;
@@ -221,7 +221,7 @@ public class Player : Photon.MonoBehaviour {
 		flame.SetActive(true);
 		flameTrail.GetComponent<ParticleSystem> ().Play ();
 		flame.GetComponent <SpriteRenderer>().enabled = true;
-		flame.transform.FindChild ("Light").gameObject.GetComponent<Light> ().range = 10f;
+		flame.transform.Find ("Light").gameObject.GetComponent<Light> ().range = 10f;
 		/*currentLerpTime = Time.deltaTime;
 		//	print ("lerping up");
 		while (currentLerpTime > Time.deltaTime - lerpTime && movingForwards) {
@@ -232,7 +232,7 @@ public class Player : Photon.MonoBehaviour {
 
 	[PunRPC]
 	public void FadeOut () {
-		flame.transform.FindChild("Light").gameObject.GetComponent<Light> ().range = 2.3f;
+		flame.transform.Find("Light").gameObject.GetComponent<Light> ().range = 2.3f;
 		flameTrail.GetComponent<ParticleSystem> ().Stop ();
 		flame.SetActive(false);
 	}
