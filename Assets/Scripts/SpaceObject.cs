@@ -47,6 +47,8 @@ public class SpaceObject : Photon.MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (!PhotonNetwork.isMasterClient) return;
+
 		/*transform.rotation = Quaternion.Euler (0, 0, transform.rotation.eulerAngles.z + rotSpeed);
 		transform.position += new Vector3 (direction.x, direction.y, 0) * speed / 100;*/
 		if (canDestroy) {
