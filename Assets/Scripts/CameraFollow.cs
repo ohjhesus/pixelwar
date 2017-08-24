@@ -29,7 +29,7 @@ public class CameraFollow : MonoBehaviour {
 	}
 
 	void FindPlayer () {
-		if (netMgr/*?*/.localPlayer != null) {
+		if (netMgr?.localPlayer != null) {
 			player = netMgr.localPlayer;
 			foundPlayer = true;
 		} else {

@@ -62,12 +62,12 @@ public class AISpawner : Photon.MonoBehaviour {
 		int index = Random.Range (0, aiObjects.Length); // pick random SO
 		//GameObject spaceObject = (GameObject)PhotonNetwork.Instantiate (spaceObjects [index].name, spawnPos, Quaternion.identity, 0);
 		GameObject enemyAI = (GameObject)PhotonNetwork.InstantiateSceneObject(aiObjects[index].name, spawnPos, Quaternion.identity, 0, null); // create SO object
-		EnemyAI AIScript = enemyAI.GetComponent<EnemyAI>(); // load script from SO
+		//EnemyAI AIScript = enemyAI.GetComponent<EnemyAI>(); // load script from SO
 	}
 
 	IEnumerator Cooldown () {
 		yield return new WaitForSeconds (Random.Range (minCooldown, maxCooldown) / (cooldownPerPlayerMultiplier * PhotonNetwork.playerList.Length));
-		//		yield return new WaitForSeconds (1);
+		//yield return new WaitForSeconds (1);
 		canSpawn = true;
 	}
 

@@ -25,6 +25,9 @@ public class NetMgr : Photon.MonoBehaviour {
 		PhotonNetwork.autoJoinLobby = true;
 		PhotonNetwork.MaxResendsBeforeDisconnect = 15;
 
+		//PhotonNetwork.networkingPeer.DebugOut = ExitGames.Client.Photon.DebugLevel.ALL;
+		//PhotonNetwork.logLevel = PhotonLogLevel.Full;
+
 		if (dontDestroyOnLoad) {
 			DontDestroyOnLoad(gameObject);
 		}

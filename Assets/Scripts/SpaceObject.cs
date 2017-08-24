@@ -20,8 +20,6 @@ public class SpaceObject : Photon.MonoBehaviour {
 
 	private bool canDestroy = true;
 
-	private NetOperations netOps;
-
 	public AudioClip[] rockHitClips;
 
 	// Sync SO health
@@ -32,10 +30,6 @@ public class SpaceObject : Photon.MonoBehaviour {
 			health = (int)stream.ReceiveNext();
 			AffectHealth(0);
 		}
-	}
-
-	void Start () {
-		netOps = GameObject.Find ("NetworkManager").GetComponent<NetOperations> ();
 	}
 
 	void FinishedSetup () {
@@ -82,6 +76,8 @@ public class SpaceObject : Photon.MonoBehaviour {
 	}
 
 	public void AffectHealth (int amount) {
+		if (!PhotonNetwork.isMasterClient) return;
+
 		health += amount;
 //		Debug.Log (name + " health: " + health);
 
@@ -91,13 +87,16 @@ public class SpaceObject : Photon.MonoBehaviour {
 			explosion.transform.localScale = new Vector3 (size * 10, size * 10, 1);
 
 			if (amount != -42069) {
-				photonView.RPC("SpawnPixels", PhotonTargets.MasterClient, Mathf.FloorToInt (size * 25));
+				//photonView.RPC("SpawnPixels", PhotonTargets.MasterClient, Mathf.FloorToInt (size * 25));
+				SpawnPixels(Mathf.FloorToInt(size * 25));
 			}
 			
 			if (transform.Find("Trail")) {
 				photonView.RPC("DestroySOWithTrail", PhotonTargets.AllBufferedViaServer);
+				//DestroySOWithTrail();
 			} else {
-				photonView.RPC("DestroySO", PhotonTargets.MasterClient);
+				//photonView.RPC("DestroySO", PhotonTargets.MasterClient);
+				DestroySO();
 			}
 		}
 	}
@@ -114,13 +113,18 @@ public class SpaceObject : Photon.MonoBehaviour {
 			transform.Find("Trail").SetParent(null);
 			SplitSprite();
 
-			photonView.RPC("DestroySO", PhotonTargets.MasterClient);
+			if (PhotonNetwork.isMasterClient) {
+				DestroySO();
+			}
 		}
 	}
 
 	void OnCollisionEnter2D (Collision2D coll) {
 		if (coll.gameObject.tag == "Projectile") {
 			AffectHealth (coll.gameObject.GetComponent<Projectile> ().damage);
+			if (rockHitClips == null) {
+				rockHitClips = (AudioClip[])Resources.LoadAll("Rock hits/");
+			}
 			AudioClip hitClip = rockHitClips [Random.Range (0, rockHitClips.Length)];
 			photonView.RPC ("RPCPlayOneShot", PhotonTargets.All, coll.gameObject.GetPhotonView().viewID, "Explosion", "Rock Hits/", hitClip.name + ".wav", 1f);
 			coll.gameObject.GetComponent<Projectile> ().Explode();

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Threading.Tasks;
 
 public class Projectile : Photon.MonoBehaviour {
 
@@ -15,6 +16,7 @@ public class Projectile : Photon.MonoBehaviour {
 	private Rigidbody2D rib;
 
 	public bool canStart = false;
+	private bool canExplode = true;
 
 	private GameObject explosion;
 	
@@ -31,9 +33,14 @@ public class Projectile : Photon.MonoBehaviour {
 	}
 
 	void Update () {
+		if (!photonView.isMine) return;
+
 		if (canStart) {
-			if (Vector3.Distance(startPos, transform.position) > travelDistance) {
-				Explode();
+			if (canExplode) {
+				if (Vector3.Distance(startPos, transform.position) > travelDistance) {
+					canExplode = false;
+					Explode();
+				}
 			}
 		}
 	}
@@ -41,7 +48,8 @@ public class Projectile : Photon.MonoBehaviour {
 	public void Explode () {
 		photonView.RPC("CreateProjectileExplosion", PhotonTargets.All);
 
-		photonView.RPC ("MasterDestroyProjectile", PhotonTargets.MasterClient);
+		//photonView.RPC ("MasterDestroyProjectile", PhotonTargets.MasterClient);
+		MasterDestroyProjectile();
 	}
 
 	[PunRPC]
@@ -58,15 +66,10 @@ public class Projectile : Photon.MonoBehaviour {
 		}
 	}
 
-	[PunRPC]
-	void MasterDestroyProjectile () {
-		StartCoroutine(DestroyProjectile());
-	}
-
-	IEnumerator DestroyProjectile () {
-		if (PhotonNetwork.isMasterClient) {
-			yield return new WaitForSeconds(1f);
-			PhotonNetwork.Destroy(gameObject);
-		}
+	//[PunRPC]
+	async void MasterDestroyProjectile () {
+		Debug.Log("Destroying projectile");
+		await Task.Delay(1000);
+		PhotonNetwork.Destroy(gameObject);
 	}
 }
