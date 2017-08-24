@@ -20,6 +20,10 @@ public class SpaceObject : Photon.MonoBehaviour {
 
 	private bool canDestroy = true;
 
+	private NetOperations netOps;
+
+	public AudioClip[] rockHitClips;
+
 	// Sync SO health
 	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 		if (stream.isWriting) {
@@ -28,6 +32,10 @@ public class SpaceObject : Photon.MonoBehaviour {
 			health = (int)stream.ReceiveNext();
 			AffectHealth(0);
 		}
+	}
+
+	void Start () {
+		netOps = GameObject.Find ("NetworkManager").GetComponent<NetOperations> ();
 	}
 
 	void FinishedSetup () {
@@ -111,6 +119,8 @@ public class SpaceObject : Photon.MonoBehaviour {
 	void OnCollisionEnter2D (Collision2D coll) {
 		if (coll.gameObject.tag == "Projectile") {
 			AffectHealth (coll.gameObject.GetComponent<Projectile> ().damage);
+			AudioClip hitClip = rockHitClips [Random.Range (0, rockHitClips.Length)];
+			photonView.RPC ("RPCPlayOneShot", PhotonTargets.All, coll.gameObject.GetPhotonView().viewID, "Explosion", "Rock Hits/", hitClip.name + ".wav", 1f);
 			coll.gameObject.GetComponent<Projectile> ().Explode();
 		}
 	}

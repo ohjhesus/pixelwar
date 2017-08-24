@@ -13,6 +13,12 @@ public class EnemyAI : Photon.MonoBehaviour {
 
 	[HideInInspector] public GameObject closestPlayer;
 
+	private Vector2 moveVelocity;
+	public float maxVelocity;
+	public float minMoveCooldown;
+	public float maxMoveCooldown;
+	private Rigidbody2D rib;
+
 	// Sync player pixels
 	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 		if (stream.isWriting) {
@@ -26,6 +32,9 @@ public class EnemyAI : Photon.MonoBehaviour {
 	void Start () {
 		netOps = GameObject.Find ("NetworkManager").GetComponent<NetOperations> ();
 		options = GameObject.Find("GameManager").GetComponent<Options>();
+		rib = GetComponent<Rigidbody2D> ();
+
+		StartCoroutine (MoveCooldown ());
 
 		foreach (Transform child in transform) {
 			if (child.GetComponent<Shoot> ()) {
@@ -33,11 +42,19 @@ public class EnemyAI : Photon.MonoBehaviour {
 			}
 		}
 	}
-	
+
+	private IEnumerator MoveCooldown () {
+		moveVelocity = new Vector2 (Random.Range (-maxVelocity, maxVelocity), Random.Range (-maxVelocity, maxVelocity));
+		yield return new WaitForSeconds (Random.Range (minMoveCooldown, maxMoveCooldown));
+		StartCoroutine (MoveCooldown ());
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (!PhotonNetwork.isMasterClient || netOps == null || options == null)
 			return;
+
+		rib.AddForce (moveVelocity);
 
 		closestPlayer = GetClosestPlayer ();
 
