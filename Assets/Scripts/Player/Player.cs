@@ -27,6 +27,7 @@ public class Player : Photon.MonoBehaviour {
 	private Options options;
 	private GameObject pauseMenu;
 	private GameObject builderMenu;
+	private GameObject deathCanvas;
 
 	[HideInInspector] public bool outOfArena;
 
@@ -52,6 +53,8 @@ public class Player : Photon.MonoBehaviour {
 			builderMenu = GameObject.Find("GameManager").GetComponent<Builder>().builderPanel;
 			options = GameObject.Find("GameManager").GetComponent<Options>();
 			netOps = GameObject.Find ("NetworkManager").GetComponent<NetOperations> ();
+			deathCanvas = GameObject.Find("DeathCanvas");
+			deathCanvas.SetActive(false);
 		}
 
 		rib = GetComponent<Rigidbody2D> ();
@@ -133,8 +136,14 @@ public class Player : Photon.MonoBehaviour {
 
 		if (pixels <= 0) {
 			Debug.Log (name + " died!");
+			Die();
 		}
     }
+
+	void Die () {
+		PhotonNetwork.DestroyPlayerObjects(photonView.owner);
+		deathCanvas.SetActive(true);
+	}
 
 	public void SpawnAttachment (string bAName, float posX, float posY) {
 		//Object loadedAttachment = Resources.Load ("Attachments/" + bAName);
@@ -190,9 +199,9 @@ public class Player : Photon.MonoBehaviour {
 		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage; // set damage
 		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance; // set how far projectile can travel before it is destroyed
 
-		shot.GetComponent<Projectile>().StartShot(shootScript, rib.velocity); // start projectile movement
-
 		photonView.RPC("SetupShot", PhotonTargets.AllBufferedViaServer, shot.GetPhotonView().viewID, shootScriptIndex); // setup shot for all players
+
+		shot.GetComponent<Projectile>().StartShot(shootScript, rib.velocity, this); // start projectile movement
 	}
 
 	[PunRPC]

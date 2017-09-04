@@ -142,6 +142,7 @@ public class NetMgr : Photon.MonoBehaviour {
 	// PLAYER SPAWNING / RESPAWNING
 
 	private IEnumerator SpawnPlayer () {
+		Debug.Log("Spawning player");
 		GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0);
 
 		while (player == null)
@@ -154,8 +155,9 @@ public class NetMgr : Photon.MonoBehaviour {
 		player.GetComponent<PlayerSetupSync>().BeginSetup(startingPixels);
 	}
 
-	private void Respawn() {
+	public void Respawn() {
+		Debug.Log("respawn 2");
 		PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player);
-		SpawnPlayer();
+		StartCoroutine (SpawnPlayer());
 	}
 }

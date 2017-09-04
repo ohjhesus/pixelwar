@@ -30,7 +30,7 @@ class PlayerSetupSync : Photon.MonoBehaviour {
 			}
 		}
 
-		playersSpawned.ForEach(item => Debug.Log(item));
+		//playersSpawned.ForEach(item => Debug.Log(item));
 
 		playerNumber = playersSpawned.IndexOf (false) + 1;
 		playersSpawned[playerNumber - 1] = true;

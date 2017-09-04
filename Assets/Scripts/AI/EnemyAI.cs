@@ -90,7 +90,7 @@ public class EnemyAI : Photon.MonoBehaviour {
 		shot.GetComponent<Projectile>().damage = shootScript.projectileDamage; // set damage
 		shot.GetComponent<Projectile>().travelDistance = shootScript.projectileTravelDistance; // set how far projectile can travel before it is destroyed
 
-		shot.GetComponent<Projectile>().StartShot(shootScript, new Vector2(0,0)); // start projectile movement
+		shot.GetComponent<Projectile>().StartShot(shootScript, new Vector2(0,0), null); // start projectile movement
 
 		photonView.RPC("SetupShot", PhotonTargets.AllBufferedViaServer, shot.GetPhotonView().viewID, shootScriptIndex); // setup shot for all players
 	}

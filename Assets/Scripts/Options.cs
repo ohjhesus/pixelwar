@@ -47,9 +47,15 @@ public class Options : MonoBehaviour {
         UpdateSettings();
     }
 
+	public void Respawn (GameObject deathCanvas) {
+		Debug.Log("respawn 1");
+		GameObject.Find("NetworkManager").GetComponent<NetMgr>().Respawn();
+		deathCanvas.SetActive(false);
+	}
+
 	void Update () {
 		if ((Input.GetKey (KeyCode.LeftCommand) || Input.GetKey (KeyCode.LeftControl)) && Input.GetKeyDown (KeyCode.R)) {
-			PlayerPrefs.SetString ("resolution", "2560x1600");
+			PlayerPrefs.SetString ("resolution", "1920x1080");
 			UpdateSettings ();
 		}
 	}

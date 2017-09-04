@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b890ebbb941d1459fb017cca897764ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameVersion: 0.5.2
+  gameVersion: 1.0.0
   appID: 
   serverIP: 
   serverPort: 0
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 216375082}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5edfd98215f97034db7469a9644973f6, type: 3}
   m_Name: 

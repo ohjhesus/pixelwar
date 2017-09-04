@@ -20,7 +20,7 @@ public class CameraFollow : MonoBehaviour {
 
 	void Update () {
 		if (trackPlayer && !isShaking) {
-			if (foundPlayer) {
+			if (foundPlayer && player != null) {
 				transform.position = new Vector3 (player.transform.position.x, player.transform.position.y, transform.position.z);
 			} else {
 				FindPlayer();
